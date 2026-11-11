@@ -5,7 +5,11 @@
 .latrunculi-menu {
   color: rgb(var(--color-foreground));
   background:
-    radial-gradient(ellipse at 50% 0, rgb(var(--color-surface) / 78%), transparent 58%),
+    radial-gradient(
+      ellipse at 50% 0,
+      rgb(var(--color-surface) / 78%),
+      transparent 58%
+    ),
     linear-gradient(
       160deg,
       rgb(var(--color-board-light)),
@@ -25,7 +29,7 @@
     inset 0 1px 5px rgb(var(--color-surface) / 54%),
     0 4px 12px rgb(var(--color-foreground) / 22%);
   color: rgb(var(--color-primary));
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: Georgia, "Times New Roman", serif;
   font-weight: 700;
 }
 
@@ -48,7 +52,7 @@
     rgb(var(--color-board-light))
   );
   color: rgb(var(--color-foreground));
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: Georgia, "Times New Roman", serif;
   letter-spacing: 0.035em;
 }
 
@@ -223,7 +227,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: Georgia, "Times New Roman", serif;
   font-size: clamp(0.55rem, 3.2vw, 1.15rem);
   font-weight: 700;
   letter-spacing: -0.08em;
@@ -247,7 +251,7 @@
   right: 2px;
   bottom: 1px;
   color: rgb(56 41 28 / 68%);
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: Georgia, "Times New Roman", serif;
   font-size: clamp(0.45rem, 1.7vw, 0.65rem);
   font-weight: 700;
   line-height: 1;
@@ -256,7 +260,10 @@
 
 @keyframes latrunculi-stone-move {
   from {
-    transform: translate(calc(var(--move-x, 0) * 12.5cqw), calc(var(--move-y, 0) * 12.5cqw));
+    transform: translate(
+      calc(var(--move-x, 0) * 12.5cqw),
+      calc(var(--move-y, 0) * 12.5cqw)
+    );
   }
   to {
     transform: translate(0, 0);
@@ -269,8 +276,7 @@
   background: radial-gradient(
     circle at 34% 27%,
     rgb(var(--color-danger) / 72%) 0,
-    rgb(var(--color-danger)) 48%,
-    rgb(var(--color-danger-foreground)) 100%
+    rgb(var(--color-danger)) 100%
   );
   box-shadow:
     inset 0 1px 3px rgb(var(--color-surface) / 48%),
@@ -285,8 +291,7 @@
   background: radial-gradient(
     circle at 34% 27%,
     rgb(var(--color-primary) / 72%) 0,
-    rgb(var(--color-primary)) 54%,
-    rgb(var(--color-primary-foreground)) 100%
+    rgb(var(--color-primary)) 100%
   );
   box-shadow:
     inset 0 1px 3px rgb(var(--color-surface) / 74%),

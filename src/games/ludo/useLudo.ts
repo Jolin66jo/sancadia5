@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface LudoState {
   count: number;
@@ -24,7 +24,22 @@ function createGame(count: number): LudoState {
 
 export function useLudo() {
   const [game, setGame] = useState(() => createGame(2));
-  const start = useCallback((count: number) => setGame(createGame(count)), []);
+  const pendingRoll = useRef<number | null>(null);
+  const clearPendingRoll = useCallback(() => {
+    if (pendingRoll.current === null) return;
+    window.clearTimeout(pendingRoll.current);
+    pendingRoll.current = null;
+  }, []);
+
+  useEffect(() => clearPendingRoll, [clearPendingRoll]);
+
+  const start = useCallback(
+    (count: number) => {
+      clearPendingRoll();
+      setGame(createGame(count));
+    },
+    [clearPendingRoll],
+  );
   const roll = useCallback(() => {
     if (game.rolling || game.dice !== null || game.winner !== null) return;
     setGame((state) => ({
@@ -32,7 +47,8 @@ export function useLudo() {
       rolling: true,
       message: `Player ${state.turn + 1} is rolling…`,
     }));
-    window.setTimeout(() => {
+    pendingRoll.current = window.setTimeout(() => {
+      pendingRoll.current = null;
       setGame((state) => {
         const dice = Math.floor(Math.random() * 6) + 1;
         const canMove = state.tokens[state.turn]!.some((position) =>

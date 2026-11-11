@@ -1,13 +1,13 @@
-import { Award, LogOut, Trophy } from 'lucide-react';
-import ScreenHeader from '@/components/ScreenHeader';
-import Button from '@/components/Button';
-import Card from '@/components/Card';
-import ButtonLink from '@/components/ButtonLink';
-import { useAuth } from '@/hooks/useAuth';
+import { Award, LogOut, Trophy } from "lucide-react";
+import ScreenHeader from "@/components/ScreenHeader";
+import Button from "@/components/Button";
+import Card from "@/components/Card";
+import ButtonLink from "@/components/ButtonLink";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function ProfileScreen() {
   const { user, signOut } = useAuth();
-  const emailInitial = (user?.email ?? '?').charAt(0).toUpperCase();
+  const emailInitial = (user?.email ?? "?").charAt(0).toUpperCase();
 
   return (
     <>
@@ -18,8 +18,12 @@ export default function ProfileScreen() {
             {emailInitial}
           </div>
           <div className="min-w-0">
-            <h2 className="truncate text-lg font-bold">{user ? user.email : 'Guest'}</h2>
-            <p className="text-sm text-subtle">{user ? 'Signed in' : 'Not signed in'}</p>
+            <h2 className="break-words text-lg font-bold [overflow-wrap:anywhere]">
+              {user ? user.email : "Guest"}
+            </h2>
+            <p className="text-sm text-subtle">
+              {user ? "Signed in" : "Not signed in"}
+            </p>
           </div>
         </Card>
 
@@ -30,7 +34,9 @@ export default function ProfileScreen() {
             </span>
             <div>
               <h2 className="text-lg font-bold">Stats</h2>
-              <p className="text-sm text-subtle">Overall level and match history.</p>
+              <p className="text-sm text-subtle">
+                Overall level and match history.
+              </p>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -39,10 +45,14 @@ export default function ProfileScreen() {
             </span>
             <div>
               <h2 className="text-lg font-bold">Achievements</h2>
-              <p className="text-sm text-subtle">Unlocked rewards and badges.</p>
+              <p className="text-sm text-subtle">
+                Unlocked rewards and badges.
+              </p>
             </div>
           </div>
-          <p className="text-sm text-subtle">Coming soon. Your progress will be tracked here.</p>
+          <p className="text-sm text-subtle">
+            Coming soon. Your progress will be tracked here.
+          </p>
         </Card>
 
         {user ? (

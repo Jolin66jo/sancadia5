@@ -1,18 +1,18 @@
-import Card from '@/components/Card';
-import ScreenHeader from '@/components/ScreenHeader';
-import { useStats } from '@/hooks/useStats';
-import { games } from '@/games/registry';
-import type { Difficulty } from '@/engine/difficulty';
+import Card from "@/components/Card";
+import ScreenHeader from "@/components/ScreenHeader";
+import { useStats } from "@/hooks/useStats";
+import { games } from "@/games/registry";
+import type { Difficulty } from "@/engine/difficulty";
 
-const difficulties: Difficulty[] = ['beginner', 'professional', 'expert'];
+const difficulties: Difficulty[] = ["beginner", "professional", "expert"];
 const labels: Record<Difficulty, string> = {
-  beginner: 'Beginner',
-  professional: 'Professional',
-  expert: 'Expert',
+  beginner: "Beginner",
+  professional: "Professional",
+  expert: "Expert",
 };
 
 function percentage(wins: number, played: number): string {
-  return played === 0 ? '—' : `${Math.round((wins / played) * 100)}%`;
+  return played === 0 ? "—" : `${Math.round((wins / played) * 100)}%`;
 }
 
 export default function StatsScreen() {
@@ -22,7 +22,8 @@ export default function StatsScreen() {
       total +
       game.twoPlayerPlayed +
       difficulties.reduce(
-        (sum, level) => sum + game.computer[level].played + game.puzzle[level].played,
+        (sum, level) =>
+          sum + game.computer[level].played + game.puzzle[level].played,
         0,
       ),
     0,
@@ -34,7 +35,9 @@ export default function StatsScreen() {
       <div className="grid gap-4 pb-4">
         <Card className="text-center">
           <p className="text-sm font-semibold text-subtle">Total points</p>
-          <p className="mt-1 text-4xl font-bold text-primary">{stats.totalPoints}</p>
+          <p className="mt-1 break-words text-4xl font-bold text-primary [overflow-wrap:anywhere]">
+            {stats.totalPoints}
+          </p>
         </Card>
 
         {totalPlayed === 0 ? (
@@ -60,7 +63,9 @@ export default function StatsScreen() {
               );
               const bestStreak = Math.max(
                 0,
-                ...difficulties.map((level) => computer?.[level].bestWinStreak ?? 0),
+                ...difficulties.map(
+                  (level) => computer?.[level].bestWinStreak ?? 0,
+                ),
               );
               const twoPlayerPlayed = record?.twoPlayerPlayed ?? 0;
               const puzzlePlayed = difficulties.reduce(
@@ -78,26 +83,36 @@ export default function StatsScreen() {
                     </span>
                   </div>
                   <p className="text-sm text-subtle">
-                    Computer win rate: {percentage(wins, played)} · Best streak: {bestStreak}
+                    Computer win rate: {percentage(wins, played)} · Best streak:{" "}
+                    {bestStreak}
                   </p>
                   {puzzlePlayed > 0 && (
                     <div className="grid gap-2 border-t border-border pt-3">
                       <h4 className="text-sm font-bold">Puzzle results</h4>
-                      <div className="grid grid-cols-3 gap-2">
+                      <div className="grid grid-cols-1 gap-2 min-[360px]:grid-cols-3">
                         {difficulties.map((level) => {
                           const row = record?.puzzle[level];
                           const averageAttempts =
                             row && row.solved > 0
-                              ? (row.totalWinningAttempts / row.solved).toFixed(1)
-                              : '—';
+                              ? (row.totalWinningAttempts / row.solved).toFixed(
+                                  1,
+                                )
+                              : "—";
                           return (
-                            <div key={level} className="rounded-xl bg-background p-2 text-center">
-                              <p className="text-xs font-semibold">{labels[level]}</p>
+                            <div
+                              key={level}
+                              className="rounded-xl bg-background p-2 text-center"
+                            >
+                              <p className="text-xs font-semibold">
+                                {labels[level]}
+                              </p>
                               <p className="mt-1 text-sm">
-                                {row?.solved ?? 0} solved · {row?.failed ?? 0} failed
+                                {row?.solved ?? 0} solved · {row?.failed ?? 0}{" "}
+                                failed
                               </p>
                               <p className="text-xs text-subtle">
-                                Best: {row?.bestAttempts ?? '—'} · Avg: {averageAttempts}
+                                Best: {row?.bestAttempts ?? "—"} · Avg:{" "}
+                                {averageAttempts}
                               </p>
                             </div>
                           );
@@ -105,14 +120,20 @@ export default function StatsScreen() {
                       </div>
                     </div>
                   )}
-                  <div className="grid grid-cols-3 gap-2 border-t border-border pt-3">
+                  <div className="grid grid-cols-1 gap-2 border-t border-border pt-3 min-[360px]:grid-cols-3">
                     {difficulties.map((level) => {
                       const row = computer?.[level];
                       return (
-                        <div key={level} className="rounded-xl bg-background p-2 text-center">
-                          <p className="text-xs font-semibold">{labels[level]}</p>
+                        <div
+                          key={level}
+                          className="rounded-xl bg-background p-2 text-center"
+                        >
+                          <p className="text-xs font-semibold">
+                            {labels[level]}
+                          </p>
                           <p className="mt-1 text-sm">
-                            {row?.wins ?? 0}W · {row?.losses ?? 0}L · {row?.draws ?? 0}D
+                            {row?.wins ?? 0}W · {row?.losses ?? 0}L ·{" "}
+                            {row?.draws ?? 0}D
                           </p>
                         </div>
                       );

@@ -42,6 +42,15 @@ arcade and local game features work without those optional values.
 - Added run-of-show docs for settings compliance and the Latrunculi admin dashboard, including Supabase edge-function deployment guidance.
 - Continued the Supabase work with migrations and admin/metrics support around profiles, game results, and published admin content.
 
+### Front-end audit updates — November 11, 2026
+
+- Added an app-level error boundary with a recovery link back to the games menu.
+- Improved shared navigation, screen headers, theme-picker wrapping, and PWA notice placement around the bottom navigation and safe-area inset.
+- Updated game screens for more accessible controls and responsive layouts, including Ludo token touch targets and timer cleanup, plus clearer board labels and sizing.
+- Adjusted the home screen spacing and long event text wrapping; improved wrapping and layout for profile and stats content.
+- Added theme-contrast, error-boundary, Ludo timer-cleanup, and home-screen regression tests.
+- Updated the UI audit inventory and route coverage. Browser-level viewport, keyboard, screen-reader, and navigation checks remain outstanding; this work does not mark the audit complete.
+
 ### What has been done
 
 - Set up the Vite + React + TypeScript arcade structure.

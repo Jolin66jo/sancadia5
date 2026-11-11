@@ -1,5 +1,5 @@
-import { ArrowLeft } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { ArrowLeft } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface ScreenHeaderProps {
   title: string;
@@ -7,9 +7,15 @@ interface ScreenHeaderProps {
   className?: string;
 }
 
-export default function ScreenHeader({ title, backTo, className }: ScreenHeaderProps) {
+export default function ScreenHeader({
+  title,
+  backTo,
+  className,
+}: ScreenHeaderProps) {
   return (
-    <header className={`flex min-h-11 items-center gap-3 pb-6 pt-2 ${className ?? ''}`.trim()}>
+    <header
+      className={`flex min-h-11 items-center gap-3 pb-6 pt-2 ${className ?? ""}`.trim()}
+    >
       {backTo && (
         <Link
           to={backTo}
@@ -19,7 +25,9 @@ export default function ScreenHeader({ title, backTo, className }: ScreenHeaderP
           <ArrowLeft className="h-5 w-5" aria-hidden="true" />
         </Link>
       )}
-      <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
+      <h1 className="min-w-0 break-words text-2xl font-bold tracking-tight [overflow-wrap:anywhere]">
+        {title}
+      </h1>
     </header>
   );
 }
