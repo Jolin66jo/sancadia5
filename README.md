@@ -49,7 +49,9 @@ arcade and local game features work without those optional values.
 - Updated game screens for more accessible controls and responsive layouts, including Ludo token touch targets and timer cleanup, plus clearer board labels and sizing.
 - Adjusted the home screen spacing and long event text wrapping; improved wrapping and layout for profile and stats content.
 - Added theme-contrast, error-boundary, Ludo timer-cleanup, and home-screen regression tests.
-- Updated the UI audit inventory and route coverage. Browser-level viewport, keyboard, screen-reader, and navigation checks remain outstanding; this work does not mark the audit complete.
+- Ran limited Chromium checks for mobile and desktop route layout, keyboard focus, reset-dialog dismissal, Ludo touch targets, deep links, and browser history; screen-reader, zoom, offline, and broader game-state checks remain outstanding.
+- Verified `npm run typecheck`, `npm run lint`, and `npm test` (48 files, 280 tests passed). `npm run format:check` still reports 206 unformatted repository files, so the complete check script does not pass.
+- Updated the UI audit inventory and route coverage. The audit remains incomplete; see [docs/UI_AUDIT.md](docs/UI_AUDIT.md) for measured results and remaining checks.
 
 ### What has been done
 
