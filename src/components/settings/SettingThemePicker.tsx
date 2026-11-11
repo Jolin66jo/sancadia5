@@ -1,7 +1,9 @@
-import { Check } from 'lucide-react';
-import SettingRow, { type SettingStatus } from '@/components/settings/SettingRow';
-import useSettingStatusDescriptionId from '@/components/settings/useSettingStatusDescriptionId';
-import { themes } from '@/theme/themes';
+import { Check } from "lucide-react";
+import SettingRow, {
+  type SettingStatus,
+} from "@/components/settings/SettingRow";
+import useSettingStatusDescriptionId from "@/components/settings/useSettingStatusDescriptionId";
+import { themes } from "@/theme/themes";
 
 interface SettingThemePickerProps {
   value: string;
@@ -13,18 +15,24 @@ interface SettingThemePickerProps {
   disabledMessage?: string;
 }
 
-const swatchTokens = ['background', 'primary', 'accent', 'board-light', 'board-dark'] as const;
+const swatchTokens = [
+  "background",
+  "primary",
+  "accent",
+  "board-light",
+  "board-dark",
+] as const;
 
 export default function SettingThemePicker({
   value,
   onChange,
   status,
-  label = 'Theme',
-  description = 'Apply a color theme across the arcade.',
+  label = "Theme",
+  description = "Apply a color theme across the arcade.",
   disabled = false,
   disabledMessage,
 }: SettingThemePickerProps) {
-  const isDisabled = status !== 'active' || disabled;
+  const isDisabled = status !== "active" || disabled;
   const statusDescriptionId = useSettingStatusDescriptionId(status);
   return (
     <SettingRow
@@ -57,8 +65,8 @@ export default function SettingThemePicker({
               }}
               className={`grid min-h-11 min-w-0 content-center justify-items-center gap-1 rounded-xl px-1 py-2 text-xs font-semibold focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40 disabled:cursor-not-allowed ${
                 selected && !isDisabled
-                  ? 'bg-primary-soft text-primary ring-2 ring-primary'
-                  : 'bg-background text-subtle ring-1 ring-border'
+                  ? "bg-primary-soft text-primary ring-2 ring-primary"
+                  : "bg-background text-subtle ring-1 ring-border"
               }`}
             >
               <span className="flex items-center gap-1" aria-hidden="true">
@@ -71,8 +79,12 @@ export default function SettingThemePicker({
                 ))}
               </span>
               <span className="flex min-w-0 max-w-full items-center gap-1">
-                {selected && <Check aria-hidden="true" className="h-3.5 w-3.5 shrink-0" />}
-                <span className="truncate">{theme.name}</span>
+                {selected && (
+                  <Check aria-hidden="true" className="h-3.5 w-3.5 shrink-0" />
+                )}
+                <span className="break-words [overflow-wrap:anywhere]">
+                  {theme.name}
+                </span>
               </span>
             </button>
           );

@@ -1,29 +1,40 @@
-import { useState } from 'react';
-import { RotateCcw } from 'lucide-react';
-import Button from '@/components/Button';
-import Card from '@/components/Card';
+import { useState } from "react";
+import { RotateCcw } from "lucide-react";
+import Button from "@/components/Button";
+import Card from "@/components/Card";
 import {
   BOARD_SIZE,
   createInitialState,
   GOOSE_SPACES,
   isPlayerCount,
   takeTurn,
-} from '@/games/ganzenbord/rules';
+} from "@/games/ganzenbord/rules";
 
-const PLAYER_COLORS = ['bg-primary', 'bg-danger', 'bg-online-accent', 'bg-accent'];
-const PLAYER_TEXT_COLORS = ['text-primary', 'text-danger', 'text-online-accent', 'text-accent'];
+const PLAYER_COLORS = [
+  "bg-primary",
+  "bg-danger",
+  "bg-online-accent",
+  "bg-accent",
+];
+const PLAYER_TEXT_COLORS = [
+  "text-primary",
+  "text-danger",
+  "text-accent",
+  "text-accent",
+];
 const SPACE_LABELS: Record<number, string> = {
-  6: 'Bridge: move to 12',
-  19: 'Inn: miss one turn',
-  31: 'Well: miss two turns',
-  42: 'Maze: return to 39',
-  52: 'Prison: miss two turns',
-  58: 'Death: return to start',
+  6: "Bridge: move to 12",
+  19: "Inn: miss one turn",
+  31: "Well: miss two turns",
+  42: "Maze: return to 39",
+  52: "Prison: miss two turns",
+  58: "Death: return to start",
 };
 
 export default function GanzenbordGame() {
   const [state, setState] = useState(() => createInitialState());
-  const { playerCount, positions, waitTurns, turn, lastRoll, winner, message } = state;
+  const { playerCount, positions, waitTurns, turn, lastRoll, winner, message } =
+    state;
 
   const startNewGame = (count = playerCount) => {
     if (isPlayerCount(count)) setState(createInitialState(count));
@@ -44,7 +55,11 @@ export default function GanzenbordGame() {
   return (
     <div className="flex flex-1 flex-col gap-4">
       <Card className="flex flex-wrap items-center justify-between gap-3">
-        <p role="status" aria-live="polite" className={`font-semibold ${PLAYER_TEXT_COLORS[turn]}`}>
+        <p
+          role="status"
+          aria-live="polite"
+          className={`font-semibold ${PLAYER_TEXT_COLORS[turn]}`}
+        >
           {winner === null ? message : `Player ${winner + 1} wins!`}
         </p>
         <label className="flex items-center gap-2 text-sm font-semibold">
@@ -80,24 +95,28 @@ export default function GanzenbordGame() {
             );
             const specialLabel =
               number === 0
-                ? 'Start'
+                ? "Start"
                 : number === BOARD_SIZE
-                  ? 'Finish'
+                  ? "Finish"
                   : (SPACE_LABELS[number] ??
-                    (GOOSE_SPACES.has(number) ? 'Goose: move forward again' : undefined));
+                    (GOOSE_SPACES.has(number)
+                      ? "Goose: move forward again"
+                      : undefined));
 
             return (
               <div
                 key={number}
                 role="gridcell"
-                aria-label={`Space ${number}${specialLabel ? `, ${specialLabel}` : ''}${occupants.length ? `, Player ${occupants.map((player) => player + 1).join(' and ')}` : ''}`}
-                className={`flex min-w-0 flex-col items-center justify-center rounded-lg border border-border p-0.5 text-center text-xs ${specialLabel ? 'bg-primary/10 font-bold' : 'bg-background'}`}
+                aria-label={`Space ${number}${specialLabel ? `, ${specialLabel}` : ""}${occupants.length ? `, Player ${occupants.map((player) => player + 1).join(" and ")}` : ""}`}
+                className={`flex min-w-0 flex-col items-center justify-center rounded-lg border border-border p-0.5 text-center text-xs ${specialLabel ? "bg-primary/10 font-bold" : "bg-background"}`}
                 style={{ gridRow: row + 1, gridColumn: column + 1 }}
               >
-                <span>{number === 0 ? 'Start' : number}</span>
+                <span>{number === 0 ? "Start" : number}</span>
                 {specialLabel && number !== 0 && number !== BOARD_SIZE && (
                   <span className="hidden text-[9px] leading-tight text-subtle sm:block">
-                    {GOOSE_SPACES.has(number) ? 'Goose' : specialLabel.split(':')[0]}
+                    {GOOSE_SPACES.has(number)
+                      ? "Goose"
+                      : specialLabel.split(":")[0]}
                   </span>
                 )}
                 <span className="mt-0.5 flex min-h-2 flex-wrap justify-center gap-0.5">
@@ -117,7 +136,7 @@ export default function GanzenbordGame() {
 
       <div className="grid grid-cols-2 gap-3">
         <Button onClick={rollDie} disabled={winner !== null}>
-          Roll die{lastRoll === null ? '' : ` · Last: ${lastRoll}`}
+          Roll die{lastRoll === null ? "" : ` · Last: ${lastRoll}`}
         </Button>
         <Button variant="secondary" onClick={() => startNewGame()}>
           <RotateCcw className="h-4 w-4" aria-hidden="true" />
@@ -131,12 +150,15 @@ export default function GanzenbordGame() {
           {positions.map((position, player) => (
             <div
               key={player}
-              className={`rounded-xl bg-background p-3 text-center ring-1 ring-border ${player === turn && winner === null ? 'ring-2 ring-primary' : ''}`}
+              className={`rounded-xl bg-background p-3 text-center ring-1 ring-border ${player === turn && winner === null ? "ring-2 ring-primary" : ""}`}
             >
-              <p className={`font-bold ${PLAYER_TEXT_COLORS[player]}`}>Player {player + 1}</p>
+              <p className={`font-bold ${PLAYER_TEXT_COLORS[player]}`}>
+                Player {player + 1}
+              </p>
               <p className="mt-1 text-sm text-subtle">
-                {position === 0 ? 'Start' : `Space ${position}`}
-                {(waitTurns[player] ?? 0) > 0 && ` · ${waitTurns[player]} turn(s) waiting`}
+                {position === 0 ? "Start" : `Space ${position}`}
+                {(waitTurns[player] ?? 0) > 0 &&
+                  ` · ${waitTurns[player]} turn(s) waiting`}
               </p>
             </div>
           ))}

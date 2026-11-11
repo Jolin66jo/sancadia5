@@ -10,7 +10,7 @@ export default function HomeScreen() {
   const challenges = content.filter((item) => item.content_type === 'daily_challenge');
 
   return (
-    <div className="flex flex-1 flex-col justify-between gap-10 py-8">
+    <div className="flex flex-1 flex-col gap-5 py-6">
       <div className="flex flex-1 flex-col items-center justify-center text-center">
         <div className="flex h-24 w-24 items-center justify-center rounded-[2rem] bg-primary text-primary-foreground shadow-xl shadow-primary/20">
           <Gamepad2 className="h-12 w-12" strokeWidth={1.75} aria-hidden="true" />
@@ -47,9 +47,13 @@ export default function HomeScreen() {
               <p className="text-xs font-bold uppercase tracking-wide text-primary">
                 Daily challenge
               </p>
-              <h2 className="mt-1 font-bold">{challenge.title}</h2>
+              <h2 className="mt-1 break-words font-bold [overflow-wrap:anywhere]">
+                {challenge.title}
+              </h2>
               {challenge.description && (
-                <p className="mt-1 text-sm text-subtle">{challenge.description}</p>
+                <p className="mt-1 break-words text-sm text-subtle [overflow-wrap:anywhere]">
+                  {challenge.description}
+                </p>
               )}
             </article>
           ))}
@@ -59,9 +63,13 @@ export default function HomeScreen() {
               className="rounded-3xl bg-surface p-5 shadow-sm ring-1 ring-border"
             >
               <p className="text-xs font-bold uppercase tracking-wide text-primary">Campaign</p>
-              <h2 className="mt-1 font-bold">{campaign.title}</h2>
+              <h2 className="mt-1 break-words font-bold [overflow-wrap:anywhere]">
+                {campaign.title}
+              </h2>
               {campaign.description && (
-                <p className="mt-1 text-sm text-subtle">{campaign.description}</p>
+                <p className="mt-1 break-words text-sm text-subtle [overflow-wrap:anywhere]">
+                  {campaign.description}
+                </p>
               )}
             </article>
           ))}

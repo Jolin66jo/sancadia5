@@ -1,16 +1,21 @@
-import { useState } from 'react';
-import { RotateCcw } from 'lucide-react';
-import Button from '@/components/Button';
-import Card from '@/components/Card';
-import { useLudo } from '@/games/ludo/useLudo';
+import { useState } from "react";
+import { RotateCcw } from "lucide-react";
+import Button from "@/components/Button";
+import Card from "@/components/Card";
+import { useLudo } from "@/games/ludo/useLudo";
 
-const playerTones = ['text-primary', 'text-danger', 'text-online-accent', 'text-accent'];
-const tokenTones = ['bg-primary', 'bg-danger', 'bg-online-accent', 'bg-accent'];
+const playerTones = [
+  "text-primary",
+  "text-danger",
+  "text-accent",
+  "text-accent",
+];
+const tokenTones = ["bg-primary", "bg-danger", "bg-online-accent", "bg-accent"];
 const tokenTextTones = [
-  'text-primary-foreground',
-  'text-danger-foreground',
-  'text-online-accent-foreground',
-  'text-primary-foreground',
+  "text-primary-foreground",
+  "text-danger-foreground",
+  "text-online-accent-foreground",
+  "text-primary-foreground",
 ];
 
 export default function LudoGame() {
@@ -35,7 +40,11 @@ export default function LudoGame() {
   return (
     <div className="flex flex-1 flex-col gap-4">
       <Card className="flex flex-wrap items-center justify-between gap-3">
-        <p role="status" aria-live="polite" className={`font-semibold ${playerTones[game.turn]}`}>
+        <p
+          role="status"
+          aria-live="polite"
+          className={`font-semibold ${playerTones[game.turn]}`}
+        >
           {game.message}
         </p>
         <label className="flex items-center gap-2 text-sm font-semibold">
@@ -68,7 +77,9 @@ export default function LudoGame() {
               tokens
                 .filter(
                   (position) =>
-                    position >= 0 && position < 52 && (player * 13 + position) % 52 === space,
+                    position >= 0 &&
+                    position < 52 &&
+                    (player * 13 + position) % 52 === space,
                 )
                 .map(() => player),
             );
@@ -76,8 +87,8 @@ export default function LudoGame() {
             return (
               <span
                 key={space}
-                aria-label={`Track space ${space + 1}${occupants.length ? `, ${occupants.length} token${occupants.length > 1 ? 's' : ''}` : ''}`}
-                className={`absolute flex h-[5.5%] w-[5.5%] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full text-[8px] font-bold ${startPlayer >= 0 ? `${tokenTones[startPlayer]} ring-2 ring-current` : 'bg-surface text-subtle'}`}
+                aria-label={`Track space ${space + 1}${occupants.length ? `, ${occupants.length} token${occupants.length > 1 ? "s" : ""}` : ""}`}
+                className={`absolute flex h-[5.5%] w-[5.5%] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full text-[8px] font-bold ${startPlayer >= 0 ? `${tokenTones[startPlayer]} ring-2 ring-current` : "bg-surface text-subtle"}`}
                 style={{ left: `${x}%`, top: `${y}%` }}
               >
                 {occupants.length
@@ -93,7 +104,7 @@ export default function LudoGame() {
           })}
           <div className="absolute inset-[34%] flex flex-col items-center justify-center rounded-full bg-surface text-center">
             <span className="text-3xl" aria-hidden="true">
-              {game.dice === null ? '🎲' : game.dice}
+              {game.dice === null ? "🎲" : game.dice}
             </span>
             <span className="text-xs font-bold">Home</span>
           </div>
@@ -102,9 +113,11 @@ export default function LudoGame() {
           {game.tokens.map((tokens, player) => (
             <div
               key={player}
-              className={`rounded-xl bg-background p-2 ring-1 ring-border ${player === game.turn ? 'ring-2 ring-primary' : ''}`}
+              className={`rounded-xl bg-background p-2 ring-1 ring-border ${player === game.turn ? "ring-2 ring-primary" : ""}`}
             >
-              <p className={`mb-1 text-center text-xs font-bold ${playerTones[player]}`}>
+              <p
+                className={`mb-1 text-center text-xs font-bold ${playerTones[player]}`}
+              >
                 Player {player + 1}
               </p>
               <div className="flex flex-wrap justify-center gap-1">
@@ -119,10 +132,10 @@ export default function LudoGame() {
                       (position >= 0 && position + game.dice > 57)
                     }
                     onClick={() => player === game.turn && selectToken(token)}
-                    aria-label={`Player ${player + 1} token ${token + 1}, ${position < 0 ? 'in yard' : position === 57 ? 'home' : `progress ${position}`}`}
-                    className={`flex h-11 w-11 items-center justify-center rounded-full text-xs font-black transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40 disabled:opacity-50 ${tokenTones[player]} ${tokenTextTones[player]} ${position < 0 ? 'opacity-50' : ''}`}
+                    aria-label={`Player ${player + 1} token ${token + 1}, ${position < 0 ? "in yard" : position === 57 ? "home" : `progress ${position}`}`}
+                    className={`flex h-11 w-11 items-center justify-center rounded-full text-xs font-black transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40 disabled:opacity-50 ${tokenTones[player]} ${tokenTextTones[player]} ${position < 0 ? "opacity-50" : ""}`}
                   >
-                    {position === 57 ? '✓' : position < 0 ? '·' : position}
+                    {position === 57 ? "✓" : position < 0 ? "·" : position}
                   </button>
                 ))}
               </div>
@@ -135,7 +148,7 @@ export default function LudoGame() {
           onClick={game.roll}
           disabled={game.rolling || game.dice !== null || game.winner !== null}
         >
-          {game.rolling ? 'Rolling…' : 'Roll die'}
+          {game.rolling ? "Rolling…" : "Roll die"}
         </Button>
         <Button variant="secondary" onClick={restart}>
           <RotateCcw className="h-4 w-4" aria-hidden="true" />
