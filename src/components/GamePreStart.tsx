@@ -23,7 +23,12 @@ export default function GamePreStart({
 
   return (
     <div className="flex flex-1 flex-col gap-3">
-      <Button aria-describedby={descriptionId} className="min-h-11 w-full" onClick={onStart}>
+      <Button
+        variant="gameStart"
+        aria-describedby={descriptionId}
+        className="min-h-11 w-full"
+        onClick={onStart}
+      >
         Start game
       </Button>
       <span id={descriptionId} className="sr-only">

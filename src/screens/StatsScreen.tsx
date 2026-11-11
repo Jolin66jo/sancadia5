@@ -30,7 +30,7 @@ export default function StatsScreen() {
 
   return (
     <>
-      <ScreenHeader title="Stats and points" backTo="/" />
+      <ScreenHeader title="Stats and points" backTo="/settings" />
       <div className="grid gap-4 pb-4">
         <Card className="text-center">
           <p className="text-sm font-semibold text-subtle">Total points</p>

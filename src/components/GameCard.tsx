@@ -1,6 +1,7 @@
 import { BookOpen } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import ReconstructedRulesBadge from '@/components/ReconstructedRulesBadge';
+import { getNation, type NationId } from '@/games/nations';
 import type { GameInfo } from '@/games/registry';
 
 interface GameCardProps {
@@ -17,6 +18,7 @@ function formatPlayers(min: number, max: number) {
 export default function GameCard({ game }: GameCardProps) {
   const navigate = useNavigate();
   const isAvailable = game.status === 'available';
+  const nationIds: readonly NationId[] = game.nations?.length ? game.nations : ['all'];
 
   const content = (
     <>
@@ -38,6 +40,16 @@ export default function GameCard({ game }: GameCardProps) {
         <span className="mt-1 block text-sm text-subtle">{game.description}</span>
         <span className="mt-2 block text-xs font-semibold text-subtle">
           {formatPlayers(game.minPlayers, game.maxPlayers)}
+        </span>
+        <span className="mt-1 flex items-center gap-1 text-lg" aria-label="Game nations">
+          {nationIds.map((nationId) => {
+            const nation = getNation(nationId);
+            return (
+              <span key={nation.id} role="img" aria-label={`${nation.name} flag`}>
+                {nation.flag}
+              </span>
+            );
+          })}
         </span>
       </span>
     </>

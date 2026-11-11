@@ -21,7 +21,6 @@ export function usePublishedContent(types: readonly AdminContentType[]) {
     let active = true;
     const client = supabase;
     if (!client) {
-      setError('Content is unavailable because Supabase is not configured.');
       setLoading(false);
       return;
     }
