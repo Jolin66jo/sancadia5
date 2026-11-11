@@ -41,24 +41,19 @@ describe('How to play rules', () => {
     expect(screen.queryByRole('heading', { name: 'Setup for connect-4' })).toBeNull();
   });
 
-  it('filters the game list to the Traditional Chinese group', async () => {
-    const user = userEvent.setup();
+  it('shows the ungrouped catalog without a game-group selector', () => {
     renderRulesApp();
 
-    await user.selectOptions(screen.getByRole('combobox', { name: 'Game group' }), 'chinese');
-
-    expect(screen.getByRole('heading', { name: 'Traditional Chinese', level: 3 })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Enjoy', level: 2 })).toBeTruthy();
+    expect(screen.queryByRole('combobox', { name: 'Game group' })).toBeNull();
     expect(screen.getByRole('button', { name: 'How to play Xiangqi' })).toBeTruthy();
-    expect(screen.queryByRole('button', { name: 'How to play Connect 4' })).toBeNull();
+    expect(screen.getByRole('button', { name: 'How to play Connect 4' })).toBeTruthy();
   });
 
-  it('lists the Egyptian games and explains that reconstructed rules are modern choices', async () => {
+  it('lists Egyptian games and explains that reconstructed rules are modern choices', async () => {
     const user = userEvent.setup();
     renderRulesApp();
 
-    await user.selectOptions(screen.getByRole('combobox', { name: 'Game group' }), 'egyptian');
-
-    expect(screen.getByRole('heading', { name: 'Ancient Egypt', level: 3 })).toBeTruthy();
     for (const gameName of [
       'Seega',
       'Egyptian Mancala',

@@ -13,9 +13,11 @@ import SettingValue from '@/components/settings/SettingValue';
 import MultiplayerSettingsBlock from '@/components/settings/MultiplayerSettingsBlock';
 import SettingsSection from '@/components/settings/SettingsSection';
 import SettingRow from '@/components/settings/SettingRow';
+import ButtonLink from '@/components/ButtonLink';
 import { isNationId } from '@/games/nations';
 import { supportsVibration } from '@/hooks/useFeedback';
 import { useSettings } from '@/hooks/useSettings';
+import { useStats } from '@/hooks/useStats';
 import type { Settings } from '@/lib/settings';
 import {
   settingsSections,
@@ -54,6 +56,7 @@ function formatValue(value: unknown): string {
 
 export default function SettingsScreen() {
   const { settings, updateSettings } = useSettings();
+  const { stats } = useStats();
 
   const updateToggle = (key: ToggleKey, checked: boolean) => {
     const patch: Partial<Settings> = { [key]: checked };
@@ -225,6 +228,16 @@ export default function SettingsScreen() {
             </div>
           </SettingsSection>
         ))}
+        <SettingsSection title="Stats and points" description="Your game results and earned points.">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="text-sm font-semibold">
+              Total points: <span className="text-primary">{stats.totalPoints}</span>
+            </p>
+            <ButtonLink to="/stats" variant="secondary">
+              View stats
+            </ButtonLink>
+          </div>
+        </SettingsSection>
       </div>
     </>
   );

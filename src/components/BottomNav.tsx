@@ -1,4 +1,4 @@
-import { Home, Store, User, Users } from 'lucide-react';
+import { Home, Settings, Store, User, Users } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
 interface NavItem {
@@ -12,6 +12,7 @@ const items: NavItem[] = [
   { to: '/games', label: 'Games', icon: Home, match: (p) => p.startsWith('/games') },
   { to: '/social', label: 'Social', icon: Users, match: (p) => p.startsWith('/social') },
   { to: '/shop', label: 'Shop', icon: Store, match: (p) => p.startsWith('/shop') },
+  { to: '/settings', label: 'Settings', icon: Settings, match: (p) => p.startsWith('/settings') },
   { to: '/profile', label: 'Profile', icon: User, match: (p) => p.startsWith('/profile') },
 ];
 

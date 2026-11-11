@@ -1,11 +1,11 @@
-import { Gamepad2, LogIn, Play, Settings, Trophy } from 'lucide-react';
+import { Gamepad2, LogIn, Play, Settings } from 'lucide-react';
 import ButtonLink from '@/components/ButtonLink';
 import { usePublishedContent } from '@/hooks/usePublishedContent';
 
 const homeContentTypes = ['campaign', 'daily_challenge'] as const;
 
 export default function HomeScreen() {
-  const { content, loading, error } = usePublishedContent(homeContentTypes);
+  const { content, loading } = usePublishedContent(homeContentTypes);
   const campaigns = content.filter((item) => item.content_type === 'campaign');
   const challenges = content.filter((item) => item.content_type === 'daily_challenge');
 
@@ -27,22 +27,13 @@ export default function HomeScreen() {
           <Settings className="h-5 w-5" aria-hidden="true" />
           Settings
         </ButtonLink>
-        <ButtonLink to="/stats" variant="secondary">
-          <Trophy className="h-5 w-5" aria-hidden="true" />
-          Stats and points
-        </ButtonLink>
         <ButtonLink to="/login" variant="secondary">
           <LogIn className="h-5 w-5" aria-hidden="true" />
           Log in / Sign up
         </ButtonLink>
       </div>
-      {(loading || error || campaigns.length > 0 || challenges.length > 0) && (
+      {(loading || campaigns.length > 0 || challenges.length > 0) && (
         <section className="grid gap-3" aria-label="Campaigns and daily challenges">
-          {error && (
-            <p role="status" className="text-sm text-subtle">
-              {error}
-            </p>
-          )}
           {loading && (
             <p role="status" className="text-sm text-subtle">
               Loading events…

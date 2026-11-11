@@ -58,10 +58,16 @@ describe('global settings page', () => {
       expect(screen.getByRole('heading', { name: 'Settings', level: 1 })).toBeTruthy();
       expect(
         screen.getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent),
-      ).toEqual(settingsSections.map((section) => section.title));
+      ).toEqual([...settingsSections.map((section) => section.title), 'Stats and points']);
+      expect(screen.getByText('Total points:')).toBeTruthy();
+      expect(screen.getByRole('link', { name: 'View stats' }).getAttribute('href')).toBe('/stats');
+      const navLinks = within(screen.getByRole('navigation', { name: 'Primary' }))
+        .getAllByRole('link')
+        .map((link) => link.getAttribute('href'));
+      expect(navLinks).toEqual(['/games', '/social', '/shop', '/settings', '/profile']);
 
       const detailSections = [...document.querySelectorAll('details')];
-      expect(detailSections).toHaveLength(settingsSections.length);
+      expect(detailSections).toHaveLength(settingsSections.length + 1);
       expect(detailSections[0]?.open).toBe(true);
       expect(detailSections.slice(1).every((section) => !section.open)).toBe(true);
       detailSections.forEach((section) => {

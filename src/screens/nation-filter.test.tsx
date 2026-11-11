@@ -34,6 +34,8 @@ describe('nation game filter', () => {
     );
 
     await user.selectOptions(screen.getByLabelText('Nation'), 'portugal');
+    expect(screen.getByRole('option', { name: '🇩🇪 Germany' })).toBeTruthy();
+    expect(screen.getByRole('option', { name: '🇸🇪 Sweden' })).toBeTruthy();
     const nationList = screen.getByRole('list', { name: 'Nations' });
     expect(nationList.querySelector('li[aria-current="true"]')?.textContent).toContain('Portugal');
     expect(window.localStorage.getItem('classic-games-arcade:settings')).toContain(
@@ -41,14 +43,19 @@ describe('nation game filter', () => {
     );
 
     await user.click(screen.getByRole('link', { name: 'Go back' }));
+    expect(
+      screen.queryByText('Content is unavailable because Supabase is not configured.'),
+    ).toBeNull();
+    expect(screen.queryByRole('link', { name: 'Stats and points' })).toBeNull();
     await user.click(screen.getByRole('link', { name: /Play/ }));
 
-    expect(screen.getByRole('heading', { name: 'Games from Portugal' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Enjoy' })).toBeTruthy();
+    expect(screen.queryByLabelText('Game group')).toBeNull();
+    expect(screen.queryByText(/Traditional Chinese|games from all nations/i)).toBeNull();
     expect(screen.getByText('Connect 4')).toBeTruthy();
+    expect(screen.getAllByRole('img', { name: 'Portugal flag' }).length).toBeGreaterThan(0);
     expect(screen.queryByText('Noughts and Crosses')).toBeNull();
-    await user.click(screen.getByRole('button', { name: 'Show all' }));
-    expect(screen.getByRole('heading', { name: 'Games from All nations' })).toBeTruthy();
-    expect(screen.getByText('Noughts and Crosses')).toBeTruthy();
+    expect(screen.queryByText(/Games from/)).toBeNull();
   });
 
   it('resets the saved nation to all with Reset all data', async () => {
