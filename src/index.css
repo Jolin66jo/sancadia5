@@ -3,48 +3,65 @@
 @tailwind utilities;
 
 .latrunculi-menu {
-  color: #38291c;
+  color: rgb(var(--color-foreground));
   background:
-    radial-gradient(ellipse at 50% 0, rgb(255 247 224 / 78%), transparent 58%),
-    linear-gradient(160deg, #e2d2b3, #c8b28e 55%, #b59c76);
+    radial-gradient(ellipse at 50% 0, rgb(var(--color-surface) / 78%), transparent 58%),
+    linear-gradient(
+      160deg,
+      rgb(var(--color-board-light)),
+      rgb(var(--color-board-dark)) 55%,
+      rgb(var(--color-board-line))
+    );
 }
 
 .latrunculi-emblem {
-  border: 1px solid #977b54;
-  background: radial-gradient(circle at 35% 25%, #f6e8ca, #bba178);
+  border: 1px solid rgb(var(--color-board-line));
+  background: radial-gradient(
+    circle at 35% 25%,
+    rgb(var(--color-board-light)),
+    rgb(var(--color-board-dark))
+  );
   box-shadow:
-    inset 0 1px 5px rgb(255 255 255 / 54%),
-    0 4px 12px rgb(56 41 28 / 22%);
-  color: #6b3027;
+    inset 0 1px 5px rgb(var(--color-surface) / 54%),
+    0 4px 12px rgb(var(--color-foreground) / 22%);
+  color: rgb(var(--color-primary));
   font-family: Georgia, 'Times New Roman', serif;
   font-weight: 700;
 }
 
 .latrunculi-menu-panel {
-  border: 1px solid #9a8059;
+  border: 1px solid rgb(var(--color-board-line));
   border-radius: 1.25rem;
-  background: rgb(244 235 216 / 90%);
+  background: rgb(var(--color-surface) / 90%);
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 70%),
-    0 10px 24px rgb(56 41 28 / 18%);
-  color: #38291c;
+    inset 0 1px 0 rgb(var(--color-background) / 70%),
+    0 10px 24px rgb(var(--color-foreground) / 18%);
+  color: rgb(var(--color-foreground));
 }
 
 .latrunculi-menu-button {
   min-height: 3.25rem;
-  border-color: #9a8059;
-  background: linear-gradient(135deg, #f8efd9, #e4d3b1);
-  color: #38291c;
+  border-color: rgb(var(--color-board-line));
+  background: linear-gradient(
+    135deg,
+    rgb(var(--color-surface)),
+    rgb(var(--color-board-light))
+  );
+  color: rgb(var(--color-foreground));
   font-family: Georgia, 'Times New Roman', serif;
   letter-spacing: 0.035em;
 }
 
 .latrunculi-menu-button:hover {
-  background: linear-gradient(135deg, #fff5df, #d9c29a);
+  background: linear-gradient(
+    135deg,
+    rgb(var(--color-primary-soft)),
+    rgb(var(--color-board-dark))
+  );
 }
 
 .latrunculi-match {
-  color: #38291c;
+  color: rgb(var(--color-foreground));
 }
 
 .latrunculi-match-header {
@@ -53,7 +70,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  border-bottom: 1px solid #b39a72;
+  border-bottom: 1px solid rgb(var(--color-board-line));
   padding-bottom: 0.75rem;
 }
 
@@ -61,11 +78,11 @@
   display: inline-flex;
   min-height: 2rem;
   align-items: center;
-  border: 1px solid #9a8059;
+  border: 1px solid rgb(var(--color-board-line));
   border-radius: 9999px;
-  background: #f2e7d2;
+  background: rgb(var(--color-board-light));
   padding: 0.3rem 0.8rem;
-  color: #604d34;
+  color: rgb(var(--color-foreground));
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -89,30 +106,30 @@
   min-height: 3.75rem;
   align-items: center;
   gap: 0.75rem;
-  border: 1px solid #a48a61;
+  border: 1px solid rgb(var(--color-board-line));
   border-left-width: 4px;
   border-radius: 0.85rem;
-  background: #f3ead7;
+  background: rgb(var(--color-surface));
   padding: 0.65rem 0.85rem;
-  color: #38291c;
+  color: rgb(var(--color-foreground));
 }
 
 .latrunculi-turn-banner.army-red {
-  border-left-color: #8f3027;
+  border-left-color: rgb(var(--color-danger));
 }
 
 .latrunculi-turn-banner.army-blue {
-  border-left-color: #405f7a;
+  border-left-color: rgb(var(--color-primary));
 }
 
 .latrunculi-army-card,
 .latrunculi-info-panel {
   min-width: 0;
-  border: 1px solid #b19a73;
+  border: 1px solid rgb(var(--color-board-line));
   border-radius: 0.9rem;
-  background: #f2e7d2;
+  background: rgb(var(--color-board-light));
   padding: 0.85rem;
-  box-shadow: 0 2px 6px rgb(56 41 28 / 8%);
+  box-shadow: 0 2px 6px rgb(var(--color-foreground) / 8%);
 }
 
 .latrunculi-army-card {
@@ -122,24 +139,28 @@
 }
 
 .latrunculi-army-card-active {
-  border-color: #8e3b2e;
-  box-shadow: 0 0 0 2px rgb(142 59 46 / 18%);
+  border-color: rgb(var(--color-danger));
+  box-shadow: 0 0 0 2px rgb(var(--color-danger) / 18%);
 }
 
 .latrunculi-info-panel {
-  color: #38291c;
+  color: rgb(var(--color-foreground));
 }
 
 .latrunculi-victory-icon {
-  background: radial-gradient(circle at 35% 25%, #f8e5ae, #bd9649);
-  color: #6b3027;
-  box-shadow: inset 0 1px 5px rgb(255 255 255 / 54%);
+  background: radial-gradient(
+    circle at 35% 25%,
+    rgb(var(--color-online-accent)),
+    rgb(var(--color-accent))
+  );
+  color: rgb(var(--color-online-accent-foreground));
+  box-shadow: inset 0 1px 5px rgb(var(--color-surface) / 54%);
 }
 
 .latrunculi-victory-details {
-  border: 1px solid #b39a72;
-  background: #f5ecd9;
-  color: #38291c;
+  border: 1px solid rgb(var(--color-board-line));
+  background: rgb(var(--color-surface));
+  color: rgb(var(--color-foreground));
 }
 
 .latrunculi-board {
@@ -150,12 +171,12 @@
   overscroll-behavior: contain;
   touch-action: none;
   user-select: none;
-  border: 1px solid #927653;
+  border: 1px solid rgb(var(--color-board-line));
   border-radius: 0.35rem;
-  background: #806746;
+  background: rgb(var(--color-board-line));
   box-shadow:
-    inset 0 0 0 1px rgb(255 246 220 / 22%),
-    0 8px 18px rgb(38 26 15 / 28%);
+    inset 0 0 0 1px rgb(var(--color-surface) / 22%),
+    0 8px 18px rgb(var(--color-foreground) / 28%);
 }
 
 .latrunculi-square {
@@ -167,16 +188,20 @@
   justify-content: center;
   overflow: hidden;
   touch-action: none;
-  background-color: #d7c5a5;
+  background-color: rgb(var(--color-board-light));
   background-image:
-    linear-gradient(135deg, rgb(255 255 255 / 12%), transparent 58%),
-    repeating-linear-gradient(3deg, transparent 0 5px, rgb(105 76 43 / 3%) 6px 7px);
-  color: #38291c;
+    linear-gradient(135deg, rgb(var(--color-surface) / 12%), transparent 58%),
+    repeating-linear-gradient(
+      3deg,
+      transparent 0 5px,
+      rgb(var(--color-board-line) / 3%) 6px 7px
+    );
+  color: rgb(var(--color-foreground));
   transition: filter 140ms ease;
 }
 
 .latrunculi-square:nth-child(4n + 1) {
-  background-color: #d0bc99;
+  background-color: rgb(var(--color-board-dark));
 }
 
 .latrunculi-square:hover:not(:disabled) {
@@ -185,7 +210,7 @@
 
 .latrunculi-square:focus-visible {
   z-index: 2;
-  outline: 3px solid #8e3b2e;
+  outline: 3px solid rgb(var(--color-primary));
   outline-offset: -3px;
 }
 
@@ -212,7 +237,7 @@
 }
 
 .latrunculi-stone-last-move {
-  outline: 2px solid #c49a46;
+  outline: 2px solid rgb(var(--color-accent));
   outline-offset: 1px;
 }
 
@@ -240,41 +265,51 @@
 
 .latrunculi-stone-red,
 .latrunculi-army-red {
-  border: 1px solid #70251e;
-  background: radial-gradient(circle at 34% 27%, #b8604e 0, #8f3027 48%, #4f1918 100%);
+  border: 1px solid rgb(var(--color-danger-foreground));
+  background: radial-gradient(
+    circle at 34% 27%,
+    rgb(var(--color-danger) / 72%) 0,
+    rgb(var(--color-danger)) 48%,
+    rgb(var(--color-danger-foreground)) 100%
+  );
   box-shadow:
-    inset 0 1px 3px rgb(255 229 206 / 48%),
-    inset 0 -3px 4px rgb(29 12 10 / 48%),
-    0 2px 3px rgb(38 26 15 / 35%);
-  color: #f0d7b4;
+    inset 0 1px 3px rgb(var(--color-surface) / 48%),
+    inset 0 -3px 4px rgb(var(--color-foreground) / 48%),
+    0 2px 3px rgb(var(--color-foreground) / 35%);
+  color: rgb(var(--color-danger-foreground));
 }
 
 .latrunculi-stone-blue,
 .latrunculi-army-blue {
-  border: 1px solid #263b52;
-  background: radial-gradient(circle at 34% 27%, #9db8d0 0, #526f8a 54%, #263b52 100%);
+  border: 1px solid rgb(var(--color-primary-foreground));
+  background: radial-gradient(
+    circle at 34% 27%,
+    rgb(var(--color-primary) / 72%) 0,
+    rgb(var(--color-primary)) 54%,
+    rgb(var(--color-primary-foreground)) 100%
+  );
   box-shadow:
-    inset 0 1px 3px rgb(255 255 255 / 74%),
-    inset 0 -3px 4px rgb(70 53 33 / 25%),
-    0 2px 3px rgb(38 26 15 / 35%);
-  color: #f0dfc0;
+    inset 0 1px 3px rgb(var(--color-surface) / 74%),
+    inset 0 -3px 4px rgb(var(--color-foreground) / 25%),
+    0 2px 3px rgb(var(--color-foreground) / 35%);
+  color: rgb(var(--color-primary-foreground));
 }
 
 .latrunculi-army-red,
 .latrunculi-army-blue {
   display: inline-block;
   box-shadow:
-    inset 0 1px 2px rgb(255 255 255 / 44%),
-    0 1px 2px rgb(38 26 15 / 25%);
+    inset 0 1px 2px rgb(var(--color-surface) / 44%),
+    0 1px 2px rgb(var(--color-foreground) / 25%);
 }
 
 .latrunculi-selected {
   position: absolute;
   z-index: 2;
   inset: 3px;
-  border: 2px solid #8e3b2e;
+  border: 2px solid rgb(var(--color-primary));
   border-radius: 0.25rem;
-  background: rgb(142 59 46 / 12%);
+  background: rgb(var(--color-primary) / 12%);
   pointer-events: none;
 }
 
@@ -287,9 +322,9 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: rgb(58 82 66 / 34%);
-  box-shadow: 0 0 0 2px rgb(58 82 66 / 46%);
-  color: white;
+  background: rgb(var(--color-primary) / 34%);
+  box-shadow: 0 0 0 2px rgb(var(--color-primary) / 46%);
+  color: rgb(var(--color-primary-foreground));
   font-family: sans-serif;
   font-size: 1rem;
   line-height: 1;
@@ -299,28 +334,28 @@
 .latrunculi-destination.latrunculi-capture {
   width: 60%;
   height: 60%;
-  border: 2px solid #8e3b2e;
-  background: rgb(142 59 46 / 38%);
-  box-shadow: 0 0 0 2px rgb(142 59 46 / 24%);
+  border: 2px solid rgb(var(--color-danger));
+  background: rgb(var(--color-danger) / 38%);
+  box-shadow: 0 0 0 2px rgb(var(--color-danger) / 24%);
+}
+
+@media (min-width: 900px) {
+  .latrunculi-match-layout {
+    grid-template-columns: minmax(0, 1.45fr) minmax(19rem, 0.75fr);
+    align-items: start;
+    gap: 1.25rem;
+  }
+
+  .latrunculi-game-info {
+    position: sticky;
+    top: 5rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .latrunculi-square,
   .latrunculi-stone {
     transition: none;
-  }
-
-  @media (min-width: 900px) {
-    .latrunculi-match-layout {
-      grid-template-columns: minmax(0, 1.45fr) minmax(19rem, 0.75fr);
-      align-items: start;
-      gap: 1.25rem;
-    }
-
-    .latrunculi-game-info {
-      position: sticky;
-      top: 5rem;
-    }
   }
 
   .latrunculi-stone-moving {

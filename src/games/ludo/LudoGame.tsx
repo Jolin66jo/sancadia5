@@ -6,6 +6,12 @@ import { useLudo } from '@/games/ludo/useLudo';
 
 const playerTones = ['text-primary', 'text-danger', 'text-online-accent', 'text-accent'];
 const tokenTones = ['bg-primary', 'bg-danger', 'bg-online-accent', 'bg-accent'];
+const tokenTextTones = [
+  'text-primary-foreground',
+  'text-danger-foreground',
+  'text-online-accent-foreground',
+  'text-primary-foreground',
+];
 
 export default function LudoGame() {
   const game = useLudo();
@@ -101,7 +107,7 @@ export default function LudoGame() {
               <p className={`mb-1 text-center text-xs font-bold ${playerTones[player]}`}>
                 Player {player + 1}
               </p>
-              <div className="flex justify-center gap-1">
+              <div className="flex flex-wrap justify-center gap-1">
                 {tokens.map((position, token) => (
                   <button
                     type="button"
@@ -114,7 +120,7 @@ export default function LudoGame() {
                     }
                     onClick={() => player === game.turn && selectToken(token)}
                     aria-label={`Player ${player + 1} token ${token + 1}, ${position < 0 ? 'in yard' : position === 57 ? 'home' : `progress ${position}`}`}
-                    className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-black text-white transition-transform hover:scale-110 disabled:opacity-50 ${tokenTones[player]} ${position < 0 ? 'opacity-50' : ''}`}
+                    className={`flex h-11 w-11 items-center justify-center rounded-full text-xs font-black transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40 disabled:opacity-50 ${tokenTones[player]} ${tokenTextTones[player]} ${position < 0 ? 'opacity-50' : ''}`}
                   >
                     {position === 57 ? '✓' : position < 0 ? '·' : position}
                   </button>

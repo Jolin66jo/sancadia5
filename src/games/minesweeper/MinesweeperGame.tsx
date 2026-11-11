@@ -51,7 +51,7 @@ export default function MinesweeperGame() {
                   game.toggleFlag(r, c);
                 }}
                 disabled={game.over || cell.revealed}
-                className={`flex aspect-square min-h-7 items-center justify-center rounded-md text-sm font-black transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${cell.revealed ? (cell.mine ? 'bg-danger text-white' : 'bg-border/70') : 'bg-primary-soft hover:bg-primary/25'} ${numberTones[cell.adjacent] ?? ''}`}
+                className={`flex aspect-square min-h-7 items-center justify-center rounded-md text-sm font-black transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${cell.revealed ? (cell.mine ? 'bg-danger text-danger-foreground' : 'bg-border/70') : 'bg-primary-soft hover:bg-primary/25'} ${numberTones[cell.adjacent] ?? ''}`}
               >
                 {cell.revealed ? (
                   cell.mine ? (

@@ -69,9 +69,11 @@ export default function StatsScreen() {
               );
               return (
                 <Card key={game.id} className="grid gap-3">
-                  <div className="flex items-center justify-between gap-3">
-                    <h3 className="font-bold">{game.name}</h3>
-                    <span className="text-sm text-subtle">
+                  <div className="flex min-w-0 flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                    <h3 className="min-w-0 break-words font-bold [overflow-wrap:anywhere]">
+                      {game.name}
+                    </h3>
+                    <span className="min-w-0 break-words text-sm text-subtle [overflow-wrap:anywhere]">
                       {played} vs computer · {twoPlayerPlayed} two-player
                     </span>
                   </div>

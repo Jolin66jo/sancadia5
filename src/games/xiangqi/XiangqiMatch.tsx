@@ -113,7 +113,7 @@ export default function XiangqiMatch({ config }: { config: MatchConfig }) {
       <div
         role="group"
         aria-label="Xiangqi board"
-        className="relative mx-auto w-full max-w-[36rem] overflow-hidden rounded-xl border-2 border-amber-900/70 bg-amber-100 shadow-lg"
+        className="relative mx-auto w-full max-w-[36rem] overflow-hidden rounded-xl border-2 border-board-line/70 bg-board-light shadow-lg"
         style={{ aspectRatio: `${BOARD_WIDTH} / ${BOARD_HEIGHT}` }}
       >
         <div
@@ -144,14 +144,14 @@ export default function XiangqiMatch({ config }: { config: MatchConfig }) {
                     : `Empty row ${row + 1}, column ${col + 1}`
                 }
                 aria-pressed={isSelected}
-                className={`relative flex min-h-0 min-w-0 items-center justify-center border-b border-r border-amber-900/40 transition focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-                  row === 4 || row === 5 ? 'bg-amber-200/70' : 'bg-amber-100'
-                } ${isLegalOrigin ? 'cursor-pointer hover:bg-amber-300/70' : ''} ${
+                className={`relative flex min-h-0 min-w-0 items-center justify-center border-b border-r border-board-line/40 transition focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                  row === 4 || row === 5 ? 'bg-board-dark/70' : 'bg-board-light'
+                } ${isLegalOrigin ? 'cursor-pointer hover:bg-board-dark/70' : ''} ${
                   isSelected ? 'z-[1] ring-2 ring-primary' : ''
                 } ${lastMove.has(index) ? 'bg-accent/30' : ''}`}
               >
                 {piece && (
-                  <span className="relative z-[1] flex h-[82%] w-[82%] items-center justify-center rounded-full bg-amber-100 p-[2px] shadow-md ring-1 ring-amber-900/70">
+                  <span className="relative z-[1] flex h-[82%] w-[82%] items-center justify-center rounded-full bg-board-light p-[2px] shadow-md ring-1 ring-board-line/70">
                     <TraditionalPiece piece={pieceDefinition(piece)} />
                   </span>
                 )}
@@ -169,7 +169,7 @@ export default function XiangqiMatch({ config }: { config: MatchConfig }) {
         </div>
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute left-1/2 top-1/2 z-[3] -translate-x-1/2 -translate-y-1/2 rounded bg-amber-100/90 px-2 py-0.5 text-[clamp(0.55rem,2vw,0.8rem)] font-semibold tracking-wide text-amber-950"
+          className="pointer-events-none absolute left-1/2 top-1/2 z-[3] -translate-x-1/2 -translate-y-1/2 rounded bg-board-light/90 px-2 py-0.5 text-[clamp(0.55rem,2vw,0.8rem)] font-semibold tracking-wide text-foreground"
         >
           楚河 · 漢界
         </span>

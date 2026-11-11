@@ -28,7 +28,9 @@ export default function GameBoard({
   getCellLabel,
 }: GameBoardProps) {
   const defaultGridClass = gridClassName ? '' : 'gap-2 rounded-3xl p-2';
-  const defaultCellClass = cellClassName ? '' : 'min-h-11 rounded-2xl text-5xl';
+  const defaultCellClass = cellClassName
+    ? ''
+    : 'min-h-0 rounded-2xl text-[clamp(0.75rem,5vw,3rem)]';
 
   return (
     <div

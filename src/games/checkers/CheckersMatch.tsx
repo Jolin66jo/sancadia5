@@ -105,11 +105,11 @@ export default function CheckersMatch({ config }: { config: MatchConfig }) {
               {piece !== null && (
                 <span
                   className={`relative flex h-[78%] w-[78%] items-center justify-center rounded-full shadow-md ${pieceColor[piece.player]} ${
-                    piece.type === 'king' ? 'ring-2 ring-yellow-300' : ''
+                    piece.type === 'king' ? 'ring-2 ring-accent' : ''
                   }`}
                 >
                   {piece.type === 'king' && (
-                    <span className="text-xs font-bold text-white/90">K</span>
+                    <span className="text-xs font-bold text-background/90">K</span>
                   )}
                 </span>
               )}

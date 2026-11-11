@@ -53,17 +53,17 @@ function PreferenceSwitch({
       aria-checked={checked}
       aria-label={label}
       onClick={() => onChange(!checked)}
-      className="flex min-h-12 w-full items-center justify-between gap-4 rounded-xl border border-[#806b4e] bg-[#f2e7d2] px-4 py-3 text-left font-semibold text-[#34291e] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#9a4332]/40"
+      className="flex min-h-12 w-full items-center justify-between gap-4 rounded-xl border border-board-line bg-surface px-4 py-3 text-left font-semibold text-foreground focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40"
     >
       {label}
       <span
         aria-hidden="true"
         className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${
-          checked ? 'bg-[#526f61]' : 'bg-[#847763]'
+          checked ? 'bg-primary' : 'bg-border'
         }`}
       >
         <span
-          className={`absolute top-1 h-4 w-4 rounded-full bg-white transition-transform ${
+          className={`absolute top-1 h-4 w-4 rounded-full bg-surface transition-transform ${
             checked ? 'translate-x-6' : 'translate-x-1'
           }`}
         />
@@ -122,7 +122,7 @@ function LatrunculiMainMenu({ onStart }: { onStart: (config: MatchConfig) => voi
           aria-labelledby="latrunculi-panel-title"
         >
           <div className="flex items-center gap-2">
-            <Shield className="h-5 w-5 text-[#8e3b2e]" aria-hidden="true" />
+            <Shield className="h-5 w-5 text-danger" aria-hidden="true" />
             <h2 id="latrunculi-panel-title" className="font-serif text-xl font-bold">
               {panel === 'computer' && 'Choose your opponent'}
               {panel === 'instructions' && 'How to play'}
@@ -237,7 +237,7 @@ function LatrunculiMainMenu({ onStart }: { onStart: (config: MatchConfig) => voi
           </Button>
         </section>
       )}
-      <footer className="text-center text-xs tracking-wide text-[#68573f]">
+      <footer className="text-center text-xs tracking-wide text-subtle">
         A historically inspired reconstruction · Italy
       </footer>
     </div>

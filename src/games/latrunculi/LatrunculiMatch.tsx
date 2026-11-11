@@ -200,7 +200,7 @@ export default function LatrunculiMatch({
       <header className="latrunculi-match-header">
         <div>
           <h1 className="font-serif text-2xl font-bold tracking-[0.12em]">LATRUNCULI</h1>
-          <p className="mt-1 text-xs font-semibold tracking-[0.18em] text-[#756147]">
+          <p className="mt-1 text-xs font-semibold tracking-[0.18em] text-subtle">
             LUDUS LATRUNCULORUM
           </p>
         </div>
@@ -234,7 +234,7 @@ export default function LatrunculiMatch({
               onContinue={() => setHandoffPending(false)}
             />
           ) : (
-            <div className="mx-auto w-full max-w-2xl rounded-2xl bg-[#66513a] p-1.5 shadow-xl sm:p-2">
+            <div className="mx-auto w-full max-w-2xl rounded-2xl bg-board-line p-1.5 shadow-xl sm:p-2">
               <GameBoard
                 label="LATRUNCULI battlefield"
                 rows={SIZE}
