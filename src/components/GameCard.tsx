@@ -29,15 +29,19 @@ export default function GameCard({ game }: GameCardProps) {
         {game.icon}
       </span>
       <span className="min-w-0 flex-1">
-        <span className="flex items-center gap-2">
-          <span className="truncate text-lg font-bold">{game.name}</span>
+        <span className="flex flex-wrap items-center gap-2">
+          <span className="min-w-0 break-words text-lg font-bold [overflow-wrap:anywhere]">
+            {game.name}
+          </span>
           {!isAvailable && (
             <span className="shrink-0 rounded-full bg-border px-2 py-0.5 text-xs font-semibold text-subtle">
               Coming soon
             </span>
           )}
         </span>
-        <span className="mt-1 block text-sm text-subtle">{game.description}</span>
+        <span className="mt-1 block break-words text-sm text-subtle [overflow-wrap:anywhere]">
+          {game.description}
+        </span>
         <span className="mt-2 block text-xs font-semibold text-subtle">
           {formatPlayers(game.minPlayers, game.maxPlayers)}
         </span>

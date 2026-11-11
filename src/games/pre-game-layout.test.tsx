@@ -103,7 +103,7 @@ describe('shared game pre-start layout', () => {
     await user.click(await screen.findByRole('radio', { name: 'Go second' }));
     await user.click(screen.getByRole('radio', { name: 'Expert' }));
     const start = screen.getByRole('button', { name: 'Start game' });
-    expect(start.className).toContain('bg-yellow-400');
+    expect(start.className).toContain('bg-online-accent');
     expect(document.getElementById(start.getAttribute('aria-describedby')!)?.textContent).toContain(
       'Expert',
     );

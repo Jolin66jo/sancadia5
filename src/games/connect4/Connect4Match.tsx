@@ -114,7 +114,7 @@ export default function Connect4Match({ config }: { config: MatchConfig }) {
                   <span className="sr-only">{cell === 0 ? '1' : '2'}</span>
                   <span
                     aria-hidden="true"
-                    className="absolute inset-0 flex items-center justify-center text-sm font-black text-white/90"
+                    className="absolute inset-0 flex items-center justify-center text-sm font-black text-background/90"
                   >
                     {cell === 0 ? '1' : '2'}
                   </span>

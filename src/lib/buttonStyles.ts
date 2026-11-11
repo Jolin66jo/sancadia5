@@ -7,7 +7,7 @@ const variants: Record<ButtonVariant, string> = {
   primary: 'bg-primary text-primary-foreground shadow-md shadow-primary/20 hover:bg-primary-hover',
   secondary: 'bg-surface text-foreground shadow-sm ring-1 ring-border hover:bg-primary-soft',
   danger: 'bg-danger text-danger-foreground shadow-md shadow-danger/20 hover:opacity-90',
-  gameStart: 'bg-yellow-400 text-slate-950 shadow-md shadow-yellow-500/20 hover:bg-yellow-300',
+  gameStart: 'bg-online-accent text-online-accent-foreground shadow-md shadow-online-accent/20 hover:brightness-95',
 };
 
 export function buttonStyles(variant: ButtonVariant = 'primary', extra?: string) {
