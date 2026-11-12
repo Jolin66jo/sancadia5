@@ -2,6 +2,7 @@ import { Check } from 'lucide-react';
 import SettingRow, { type SettingStatus } from '@/components/settings/SettingRow';
 import useSettingStatusDescriptionId from '@/components/settings/useSettingStatusDescriptionId';
 import type { SettingOption } from '@/components/settings/SettingSelect';
+import useTranslation from '@/hooks/useTranslation';
 
 interface SettingSegmentedProps {
   label: string;
@@ -24,6 +25,7 @@ export default function SettingSegmented({
   disabled = false,
   disabledMessage,
 }: SettingSegmentedProps) {
+  const { tText } = useTranslation();
   const isDisabled = status !== 'active' || disabled;
   const statusDescriptionId = useSettingStatusDescriptionId(status);
   if (options.length < 2 || options.length > 4) {
@@ -50,7 +52,7 @@ export default function SettingSegmented({
               key={option.value}
               type="button"
               role="radio"
-              aria-label={option.label}
+              aria-label={tText(option.label)}
               aria-checked={selected}
               aria-disabled={isDisabled || option.disabled === true}
               aria-describedby={statusDescriptionId}
@@ -65,7 +67,7 @@ export default function SettingSegmented({
               }`}
             >
               {selected && <Check aria-hidden="true" className="h-4 w-4 shrink-0" />}
-              <span>{option.label}</span>
+              <span>{tText(option.label)}</span>
             </button>
           );
         })}

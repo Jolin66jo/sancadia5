@@ -1,5 +1,6 @@
 import { useId, type ReactNode } from 'react';
 import ComingSoonBadge from '@/components/settings/ComingSoonBadge';
+import useTranslation from '@/hooks/useTranslation';
 
 export type SettingStatus = 'active' | 'preview' | 'unavailable';
 
@@ -20,6 +21,7 @@ export default function SettingRow({
   statusDescriptionId,
   children,
 }: SettingRowProps) {
+  const { tText } = useTranslation();
   const generatedId = useId();
   const descriptionId = statusDescriptionId ?? generatedId;
 
@@ -30,16 +32,16 @@ export default function SettingRow({
     >
       <div className="grid gap-1">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="font-semibold text-foreground">{label}</span>
+          <span className="font-semibold text-foreground">{tText(label)}</span>
           {status === 'preview' && <ComingSoonBadge id={descriptionId} />}
           {status === 'unavailable' && (
             <span id={descriptionId} className="text-sm font-medium text-subtle">
-              Not available for this game
+              {tText('Not available for this game')}
             </span>
           )}
         </div>
-        {description && <span className="text-sm text-subtle">{description}</span>}
-        {disabledMessage && <span className="text-sm text-subtle">{disabledMessage}</span>}
+        {description && <span className="text-sm text-subtle">{tText(description)}</span>}
+        {disabledMessage && <span className="text-sm text-subtle">{tText(disabledMessage)}</span>}
       </div>
       {children}
     </div>

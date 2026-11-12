@@ -2,17 +2,19 @@ import { Sparkles, Store } from 'lucide-react';
 import ScreenHeader from '@/components/ScreenHeader';
 import Card from '@/components/Card';
 import { usePublishedContent } from '@/hooks/usePublishedContent';
+import useTranslation from '@/hooks/useTranslation';
 
 const shopContentTypes = ['cosmetic_collection', 'premium_product'] as const;
 
 export default function ShopScreen() {
+  const { tText } = useTranslation();
   const { content, loading, error } = usePublishedContent(shopContentTypes);
   const collections = content.filter((item) => item.content_type === 'cosmetic_collection');
   const products = content.filter((item) => item.content_type === 'premium_product');
 
   return (
     <>
-      <ScreenHeader title="Shop" backTo="/" />
+      <ScreenHeader title={tText('Shop')} backTo="/" />
       <div className="grid gap-4 pb-4">
         {error && (
           <Card role="alert" className="text-sm">
@@ -21,7 +23,7 @@ export default function ShopScreen() {
         )}
         {loading && (
           <p role="status" className="text-sm text-subtle">
-            Loading shop content…
+            {tText('Loading shop content…')}
           </p>
         )}
         <Card className="grid gap-4">
@@ -30,12 +32,16 @@ export default function ShopScreen() {
               <Store className="h-6 w-6" aria-hidden="true" />
             </span>
             <div>
-              <h2 className="text-lg font-bold">Marketplace</h2>
-              <p className="text-sm text-subtle">Avatar cosmetics, power-ups, and daily deals.</p>
+              <h2 className="text-lg font-bold">{tText('Marketplace')}</h2>
+              <p className="text-sm text-subtle">
+                {tText('Avatar cosmetics, power-ups, and daily deals.')}
+              </p>
             </div>
           </div>
           {collections.length === 0 ? (
-            <p className="text-sm text-subtle">No cosmetic collections are currently available.</p>
+            <p className="text-sm text-subtle">
+              {tText('No cosmetic collections are currently available.')}
+            </p>
           ) : (
             <div className="grid gap-3">
               {collections.map((collection) => (
@@ -55,12 +61,14 @@ export default function ShopScreen() {
               <Sparkles className="h-6 w-6" aria-hidden="true" />
             </span>
             <div>
-              <h2 className="text-lg font-bold">Battle Pass</h2>
-              <p className="text-sm text-subtle">Seasonal rewards and unlocks.</p>
+              <h2 className="text-lg font-bold">{tText('Battle Pass')}</h2>
+              <p className="text-sm text-subtle">{tText('Seasonal rewards and unlocks.')}</p>
             </div>
           </div>
           {products.length === 0 ? (
-            <p className="text-sm text-subtle">No premium products are currently available.</p>
+            <p className="text-sm text-subtle">
+              {tText('No premium products are currently available.')}
+            </p>
           ) : (
             <div className="grid gap-3">
               {products.map((product) => (

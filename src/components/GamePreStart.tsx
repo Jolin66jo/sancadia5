@@ -3,6 +3,7 @@ import Button from '@/components/Button';
 import Card from '@/components/Card';
 import GameRulesButton from '@/components/GameRulesButton';
 import GameSettingsButton from '@/components/GameSettingsButton';
+import useTranslation from '@/hooks/useTranslation';
 
 interface GamePreStartProps {
   gameId?: string;
@@ -19,6 +20,7 @@ export default function GamePreStart({
   onStart,
   children,
 }: GamePreStartProps) {
+  const { tText } = useTranslation();
   const descriptionId = 'game-start-description';
 
   return (
@@ -29,7 +31,7 @@ export default function GamePreStart({
         className="min-h-11 w-full"
         onClick={onStart}
       >
-        Start game
+        {tText('Start game')}
       </Button>
       <span id={descriptionId} className="sr-only">
         {description}

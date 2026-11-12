@@ -4,6 +4,7 @@ import ButtonLink from '@/components/ButtonLink';
 import ScreenHeader from '@/components/ScreenHeader';
 import { games } from '@/games/registry';
 import { getRulesContent } from '@/games/rulesContent';
+import useTranslation from '@/hooks/useTranslation';
 
 function ConnectFourDirections() {
   return (
@@ -47,6 +48,7 @@ function ConnectFourDirections() {
 export default function RulesScreen() {
   const { gameId } = useParams();
   const navigate = useNavigate();
+  const { tText } = useTranslation();
   const game = games.find((item) => item.id === gameId);
   const rules = gameId ? getRulesContent(gameId) : undefined;
 
@@ -56,63 +58,63 @@ export default function RulesScreen() {
 
   return (
     <>
-      <ScreenHeader title={`${rules.title} Rules`} backTo="/games" />
+      <ScreenHeader title={`${rules.title} ${tText('Rules')}`} backTo={`/games/${game.id}`} />
       <div className="grid gap-4 pb-6">
         <section aria-labelledby="rules-goal" className="grid gap-2">
           <h2 id="rules-goal" className="text-lg font-bold">
-            Goal
+            {tText('Goal')}
           </h2>
-          <p className="text-base leading-relaxed text-foreground">{rules.goal}</p>
+          <p className="text-base leading-relaxed text-foreground">{tText(rules.goal)}</p>
         </section>
         <section aria-labelledby="rules-setup" className="grid gap-2">
           <h2 id="rules-setup" className="text-lg font-bold">
-            Setup
+            {tText('Setup')}
           </h2>
-          <p className="text-base leading-relaxed text-foreground">{rules.setup}</p>
+          <p className="text-base leading-relaxed text-foreground">{tText(rules.setup)}</p>
         </section>
         <section aria-labelledby="rules-how-to-play" className="grid gap-2">
           <h2 id="rules-how-to-play" className="text-lg font-bold">
-            How to play
+            {tText('How to play')}
           </h2>
           <ol className="list-decimal space-y-2 pl-6 text-base leading-relaxed text-foreground">
             {rules.howToPlay.map((step) => (
-              <li key={step}>{step}</li>
+              <li key={step}>{tText(step)}</li>
             ))}
           </ol>
         </section>
         {game.id === 'connect-4' && <ConnectFourDirections />}
         <section aria-labelledby="rules-winning" className="grid gap-2">
           <h2 id="rules-winning" className="text-lg font-bold">
-            Winning
+            {tText('Winning')}
           </h2>
-          <p className="text-base leading-relaxed text-foreground">{rules.winning}</p>
+          <p className="text-base leading-relaxed text-foreground">{tText(rules.winning)}</p>
         </section>
         <section aria-labelledby="rules-special" className="grid gap-2">
           <h2 id="rules-special" className="text-lg font-bold">
-            Special rules
+            {tText('Special rules')}
           </h2>
           <ul className="list-disc space-y-2 pl-6 text-base leading-relaxed text-foreground">
             {rules.specialRules.map((rule) => (
-              <li key={rule}>{rule}</li>
+              <li key={rule}>{tText(rule)}</li>
             ))}
           </ul>
         </section>
         <section aria-labelledby="rules-difficulty" className="grid gap-2">
           <h2 id="rules-difficulty" className="text-lg font-bold">
-            Difficulty notes
+            {tText('Difficulty notes')}
           </h2>
           <dl className="grid gap-2">
             {(
               [
-                ['beginner', 'Beginner'],
-                ['professional', 'Professional'],
-                ['expert', 'Expert'],
+                ['beginner', tText('Beginner')],
+                ['professional', tText('Professional')],
+                ['expert', tText('Expert')],
               ] as const
             ).map(([level, label]) => (
               <div key={level} className="rounded-xl bg-surface p-3 ring-1 ring-border">
                 <dt className="font-semibold">{label}</dt>
                 <dd className="mt-1 text-base leading-relaxed text-subtle">
-                  {rules.difficultyNotes[level]}
+                  {tText(rules.difficultyNotes[level])}
                 </dd>
               </div>
             ))}
@@ -120,17 +122,17 @@ export default function RulesScreen() {
         </section>
         <section aria-labelledby="rules-tips" className="grid gap-2">
           <h2 id="rules-tips" className="text-lg font-bold">
-            Tips
+            {tText('Tips')}
           </h2>
           <ul className="list-disc space-y-2 pl-6 text-base leading-relaxed text-foreground">
             {rules.tips.map((tip) => (
-              <li key={tip}>{tip}</li>
+              <li key={tip}>{tText(tip)}</li>
             ))}
           </ul>
         </section>
         <div className="grid grid-cols-2 gap-3 pt-2">
           <ButtonLink to="/games" variant="secondary">
-            Back to games
+            {tText('Back to games')}
           </ButtonLink>
           {comingSoon ? (
             <Button
@@ -138,13 +140,13 @@ export default function RulesScreen() {
               aria-describedby="rules-play-coming-soon"
               className="flex-wrap px-2 text-sm leading-tight"
             >
-              <span>Play</span>
+              <span>{tText('Play')}</span>
               <span id="rules-play-coming-soon" className="text-sm">
-                Coming soon
+                {tText('Coming soon')}
               </span>
             </Button>
           ) : (
-            <Button onClick={() => navigate(`/games/${game.id}`)}>Play</Button>
+            <Button onClick={() => navigate(`/games/${game.id}`)}>{tText('Play')}</Button>
           )}
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { ChevronDown } from 'lucide-react';
 import type { ReactNode } from 'react';
 import Card from '@/components/Card';
+import useTranslation from '@/hooks/useTranslation';
 
 interface SettingsSectionProps {
   title: string;
@@ -15,15 +16,16 @@ export default function SettingsSection({
   open = false,
   children,
 }: SettingsSectionProps) {
+  const { tText } = useTranslation();
   return (
     <Card className="!p-0 overflow-hidden">
       <details open={open} className="group">
         <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 p-4 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-primary/40 [&::-webkit-details-marker]:hidden">
           <div className="grid gap-1">
             <span role="heading" aria-level={2} className="text-lg font-bold text-foreground">
-              {title}
+              {tText(title)}
             </span>
-            {description && <span className="text-sm text-subtle">{description}</span>}
+            {description && <span className="text-sm text-subtle">{tText(description)}</span>}
           </div>
           <ChevronDown
             aria-hidden="true"

@@ -3,6 +3,7 @@ import ScreenHeader from "@/components/ScreenHeader";
 import { useStats } from "@/hooks/useStats";
 import { games } from "@/games/registry";
 import type { Difficulty } from "@/engine/difficulty";
+import useTranslation from "@/hooks/useTranslation";
 
 const difficulties: Difficulty[] = ["beginner", "professional", "expert"];
 const labels: Record<Difficulty, string> = {
@@ -17,6 +18,7 @@ function percentage(wins: number, played: number): string {
 
 export default function StatsScreen() {
   const { stats } = useStats();
+  const { tText } = useTranslation();
   const totalPlayed = Object.values(stats.games).reduce(
     (total, game) =>
       total +
@@ -31,10 +33,10 @@ export default function StatsScreen() {
 
   return (
     <>
-      <ScreenHeader title="Stats and points" backTo="/settings" />
+      <ScreenHeader title={tText("Stats and points")} backTo="/settings" />
       <div className="grid gap-4 pb-4">
         <Card className="text-center">
-          <p className="text-sm font-semibold text-subtle">Total points</p>
+          <p className="text-sm font-semibold text-subtle">{tText("Total points")}</p>
           <p className="mt-1 break-words text-4xl font-bold text-primary [overflow-wrap:anywhere]">
             {stats.totalPoints}
           </p>
@@ -42,14 +44,14 @@ export default function StatsScreen() {
 
         {totalPlayed === 0 ? (
           <Card className="text-center">
-            <h2 className="text-lg font-bold">Your arcade stats start here</h2>
+            <h2 className="text-lg font-bold">{tText("Your arcade stats start here")}</h2>
             <p className="mt-2 text-subtle">
-              Finish a game to see your results, streaks and points.
+              {tText("Finish a game to see your results, streaks and points.")}
             </p>
           </Card>
         ) : (
           <>
-            <h2 className="text-lg font-bold">Games</h2>
+            <h2 className="text-lg font-bold">{tText("Games")}</h2>
             {games.map((game) => {
               const record = stats.games[game.id];
               const computer = record?.computer;
@@ -88,7 +90,7 @@ export default function StatsScreen() {
                   </p>
                   {puzzlePlayed > 0 && (
                     <div className="grid gap-2 border-t border-border pt-3">
-                      <h4 className="text-sm font-bold">Puzzle results</h4>
+                      <h4 className="text-sm font-bold">{tText("Puzzle results")}</h4>
                       <div className="grid grid-cols-1 gap-2 min-[360px]:grid-cols-3">
                         {difficulties.map((level) => {
                           const row = record?.puzzle[level];

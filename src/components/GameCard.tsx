@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import ReconstructedRulesBadge from '@/components/ReconstructedRulesBadge';
 import { getNation, type NationId } from '@/games/nations';
 import type { GameInfo } from '@/games/registry';
+import useTranslation from '@/hooks/useTranslation';
 
 interface GameCardProps {
   game: GameInfo;
@@ -17,6 +18,7 @@ function formatPlayers(min: number, max: number) {
 
 export default function GameCard({ game }: GameCardProps) {
   const navigate = useNavigate();
+  const { tText } = useTranslation();
   const isAvailable = game.status === 'available';
   const nationIds: readonly NationId[] = game.nations?.length ? game.nations : ['all'];
 
@@ -35,17 +37,20 @@ export default function GameCard({ game }: GameCardProps) {
           </span>
           {!isAvailable && (
             <span className="shrink-0 rounded-full bg-border px-2 py-0.5 text-xs font-semibold text-subtle">
-              Coming soon
+              {tText('Coming soon')}
             </span>
           )}
         </span>
         <span className="mt-1 block break-words text-sm text-subtle [overflow-wrap:anywhere]">
-          {game.description}
+          {tText(game.description)}
         </span>
         <span className="mt-2 block text-xs font-semibold text-subtle">
-          {formatPlayers(game.minPlayers, game.maxPlayers)}
+          {tText(formatPlayers(game.minPlayers, game.maxPlayers))}
         </span>
-        <span className="mt-1 flex items-center gap-1 text-lg" aria-label="Game nations">
+        <span
+          className="mt-1 flex items-center gap-1 text-lg"
+          aria-label={tText('Game nations')}
+        >
           {nationIds.map((nationId) => {
             const nation = getNation(nationId);
             return (
@@ -82,7 +87,7 @@ export default function GameCard({ game }: GameCardProps) {
       )}
       <button
         type="button"
-        aria-label={`How to play ${game.name}`}
+        aria-label={tText('How to play {game}', { game: game.name })}
         onClick={(event) => {
           event.stopPropagation();
           event.preventDefault();

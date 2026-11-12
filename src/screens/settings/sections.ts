@@ -1,4 +1,3 @@
-import { nations } from '@/games/nations';
 import { difficultyOptions } from '@/lib/difficultyOptions';
 import type { Settings } from '@/lib/settings';
 
@@ -6,8 +5,7 @@ type ToggleKey = {
   [K in keyof Settings]: Settings[K] extends boolean ? K : never;
 }[keyof Settings];
 
-type SelectKey =
-  'nation' | 'language' | 'screenOrientation' | 'friendRequestPrivacy' | 'graphicsQuality';
+type SelectKey = 'language' | 'screenOrientation' | 'friendRequestPrivacy' | 'graphicsQuality';
 
 export type SettingsRow =
   | { type: 'nation-list'; key: 'nation' }
@@ -85,13 +83,6 @@ export interface SettingsSectionDefinition {
   rows: readonly SettingsRow[];
 }
 
-const languageOptions = [
-  { value: 'en', label: 'English' },
-  { value: 'es', label: 'Español' },
-  { value: 'fr', label: 'Français' },
-  { value: 'zh', label: '中文' },
-] as const;
-
 const animationSpeedOptions = [
   { value: 'off', label: 'Off' },
   { value: 'slow', label: 'Slow' },
@@ -104,20 +95,7 @@ export const settingsSections: readonly SettingsSectionDefinition[] = [
     id: 'shire',
     title: 'Sancadia Shire',
     description: 'Explore games from each nation.',
-    rows: [
-      { type: 'nation-list', key: 'nation' },
-      {
-        type: 'select',
-        key: 'nation',
-        label: 'Nation',
-        description: 'Filter the games list by nation.',
-        status: 'active',
-        options: nations.map(({ id, name, flag }) => ({
-          value: id,
-          label: `${flag} ${name}`,
-        })),
-      },
-    ],
+    rows: [{ type: 'nation-list', key: 'nation' }],
   },
   {
     id: 'account',
@@ -180,14 +158,6 @@ export const settingsSections: readonly SettingsSectionDefinition[] = [
         label: 'Dark mode',
         description: 'Use a dark color scheme.',
         status: 'preview',
-      },
-      {
-        type: 'select',
-        key: 'language',
-        label: 'Language',
-        description: 'Choose the display language.',
-        status: 'preview',
-        options: languageOptions,
       },
       {
         type: 'toggle',

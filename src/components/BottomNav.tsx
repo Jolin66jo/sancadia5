@@ -1,9 +1,11 @@
 import { Home, Settings, Store, User, Users } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import useTranslation from "@/hooks/useTranslation";
+import type { TranslationKey } from "@/lib/i18n";
 
 interface NavItem {
   to: string;
-  label: string;
+  label: TranslationKey;
   icon: typeof Home;
   match: (pathname: string) => boolean;
 }
@@ -11,31 +13,31 @@ interface NavItem {
 const items: NavItem[] = [
   {
     to: "/games",
-    label: "Games",
+    label: "nav.games",
     icon: Home,
     match: (p) => p.startsWith("/games"),
   },
   {
     to: "/social",
-    label: "Social",
+    label: "nav.social",
     icon: Users,
     match: (p) => p.startsWith("/social"),
   },
   {
     to: "/shop",
-    label: "Shop",
+    label: "nav.shop",
     icon: Store,
     match: (p) => p.startsWith("/shop"),
   },
   {
     to: "/settings",
-    label: "Settings",
+    label: "nav.settings",
     icon: Settings,
     match: (p) => p.startsWith("/settings"),
   },
   {
     to: "/profile",
-    label: "Profile",
+    label: "nav.profile",
     icon: User,
     match: (p) => p.startsWith("/profile"),
   },
@@ -43,6 +45,7 @@ const items: NavItem[] = [
 
 export default function BottomNav() {
   const { pathname } = useLocation();
+  const { t } = useTranslation();
   const hideOn = ["/login", "/signup"];
   if (hideOn.some((p) => pathname === p)) return null;
 
@@ -69,7 +72,7 @@ export default function BottomNav() {
                 <span
                   className={`text-[0.7rem] font-medium ${active ? "text-primary" : "text-subtle"}`}
                 >
-                  {label}
+                  {t(label)}
                 </span>
               </Link>
             </li>
