@@ -17,9 +17,17 @@
 - Leaderboard views use `security_invoker = false` deliberately: they must aggregate results across users even though the underlying tables are owner-readable. They expose only game ID, display name, points, wins, and rank—never user IDs or emails. Keep their projections and filters narrow.
 - The service-role key bypasses RLS; it must never be shipped to clients.
 
+## Billing data flow and table writers
+
+- Billing access is feature-based. Add a feature by inserting one row in `entitlement_features`; `billing_config` is the single place for `paywall_enabled` and the past-due grace period. The default paywall setting is off.
+- Clients use the publishable key to read their own `stripe_customers` and `entitlements` rows and may call `has_entitlement(feature)` / `my_entitlements()`. They cannot write `stripe_customers`, `entitlements`, `stripe_events`, features, or billing configuration.
+- The future trusted Stripe webhook will insert a `stripe_events` row first and call `apply_entitlement_event` in the same transaction. That service-role-only function records the event and applies an idempotent entitlement grant, update, cancellation, expiration, or refund. No Stripe endpoint is implemented yet.
+- Only `service_role` writes `stripe_customers`, `entitlements`, `stripe_events`, `entitlement_features`, and `billing_config`. The later webhook must keep Stripe secrets on the server.
+- `submit_result` writes verified `game_results` and `game_stats`; its database trigger flags expert results without `expert_access` when the paywall config is enabled. `admin_content` is written only through the allowlisted admin Edge Function's service-role client. Authenticated users may insert their own abuse reports; they cannot read or modify reports.
+
 When adding a database table:
 
-- Enable row-level security (RLS) in the migration and verify it is enabled after deployment.
+- RLS is auto-enabled for new `public` tables by `rls_auto_enable()`; also explicitly enable it in the migration and verify it after deployment.
 - Do not add client write policies unless the use case is documented and justified.
 - Grant only the minimum required privileges; RLS does not replace privilege review.
 - Review read policies for data exposure and write policies for ownership and validation.

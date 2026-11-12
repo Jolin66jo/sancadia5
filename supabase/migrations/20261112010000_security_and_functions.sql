@@ -15,9 +15,8 @@ alter table public.imported_stats
   add column if not exists imported boolean not null default true;
 
 insert into public.game_catalog (game_id, kind, active)
-select id, type, active
+select id, case when type = 'puzzle' then 'puzzle' else 'versus' end, active
 from public.games
-where type in ('versus', 'puzzle')
 on conflict (game_id) do nothing;
 
 do $$
@@ -112,6 +111,9 @@ with results as (
 )
 select game_id, display_name, points, wins, rank from ranked;
 
+comment on view public.leaderboard_all_time is
+  'security_invoker=false is deliberate so the view can aggregate across owner-only rows; only display names and aggregate scores are exposed.';
+
 create or replace view public.leaderboard_weekly
 with (security_invoker = false)
 as
@@ -140,6 +142,9 @@ with results as (
   from scores
 )
 select game_id, display_name, points, wins, rank from ranked;
+
+comment on view public.leaderboard_weekly is
+  'security_invoker=false is deliberate so the view can aggregate across owner-only rows; only display names and aggregate scores are exposed.';
 
 revoke all on public.profile_display_names, public.leaderboard_all_time,
   public.leaderboard_weekly from anon, authenticated;
@@ -314,10 +319,11 @@ begin
 
   insert into public.game_results (
     user_id, client_result_id, game_id, difficulty, outcome, attempts,
-    hints_used, points_awarded, flagged, imported
+    hints_used, points_awarded, match_mode, flagged, imported
   ) values (
     v_user, p_client_result_id, p_game_id, p_difficulty, v_outcome, v_attempts,
-    v_hints, v_points, false, false
+    v_hints, v_points, case when v_kind = 'puzzle' then 'puzzle' else 'computer' end,
+    false, false
   );
 
   update public.game_stats set
@@ -581,7 +587,9 @@ begin
      )) then
     raise exception 'invalid_game';
   end if;
-  if p_period not in ('all_time', 'weekly') then raise exception 'invalid_period'; end if;
+  if p_period is null or p_period not in ('all_time', 'weekly') then
+    raise exception 'invalid_period';
+  end if;
 
   return query
   with filtered as (

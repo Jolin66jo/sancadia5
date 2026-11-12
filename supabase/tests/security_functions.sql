@@ -11,6 +11,9 @@ declare
   v_result jsonb;
   v_count integer;
   v_points integer;
+  v_rank bigint;
+  v_rank_points bigint;
+  v_rank_wins bigint;
   v_case record;
   v_profile_name text;
 begin
@@ -74,6 +77,11 @@ begin
   exception when insufficient_privilege then null;
   end;
   begin
+    update public.game_results set points_awarded = 999999 where user_id = v_user_b;
+    raise exception 'FAIL: user A can write user B game_results';
+  exception when insufficient_privilege then null;
+  end;
+  begin
     insert into public.game_stats (user_id, game_id, difficulty, points)
     values (v_user_a, 'noughts-and-crosses', 'beginner', 999999);
     raise exception 'FAIL: authenticated user can directly insert game_stats';
@@ -131,14 +139,56 @@ begin
     and table_name in ('leaderboard_all_time', 'leaderboard_weekly')
     and column_name in ('user_id', 'id', 'email');
   if v_count <> 0 then raise exception 'FAIL: leaderboard exposes an ID or email'; end if;
+  select count(*) into v_count
+  from information_schema.columns
+  where table_schema = 'public' and table_name = 'profile_display_names';
+  if v_count <> 1 then raise exception 'FAIL: display-name view exposes extra columns'; end if;
 
   select count(*) into v_count
   from public.leaderboard_all_time
   where game_id = 'overall' and display_name = v_profile_name and points = 15;
   if v_count <> 1 then raise exception 'FAIL: leaderboard score is missing'; end if;
+  select rank_data.points, rank_data.wins, rank_data.rank
+  into v_rank_points, v_rank_wins, v_rank
+  from public.my_rank('overall', 'all_time') as rank_data;
+  if v_rank_points <> 15 or v_rank_wins <> 1 or v_rank <> 2 then
+    raise exception 'FAIL: my_rank did not return the caller rank data';
+  end if;
 
   insert into public.reports (reporter_id, reported_display_name, reason)
   values (v_user_a, 'Other_01', 'test report');
+
+  execute 'reset role';
+  insert into public.game_results (
+    user_id, client_result_id, game_id, difficulty, outcome, points_awarded, flagged
+  ) values (
+    v_user_a, gen_random_uuid(), 'noughts-and-crosses', 'beginner', 'win', 900, true
+  );
+  insert into public.game_results (
+    user_id, client_result_id, game_id, difficulty, outcome, points_awarded, imported
+  ) values (
+    v_user_a, gen_random_uuid(), 'noughts-and-crosses', 'beginner', 'win', 900, true
+  );
+  execute 'set local role authenticated';
+  select count(*) into v_count
+  from public.leaderboard_all_time
+  where game_id = 'overall' and display_name = v_profile_name and points = 15 and wins = 1;
+  if v_count <> 1 then raise exception 'FAIL: flagged/imported results affected leaderboard'; end if;
+
+  v_result := public.submit_result(
+    gen_random_uuid(), 'noughts-and-crosses', 'beginner', 'win', 'computer', null, 0
+  );
+  if (v_result ->> 'points_awarded')::integer <> 20 then
+    raise exception 'FAIL: existing match-mode RPC was not routed to secure scoring';
+  end if;
+
+  v_result := public.delete_my_data();
+  if not (v_result ->> 'deleted')::boolean then
+    raise exception 'FAIL: delete_my_data did not complete';
+  end if;
+  select count(*) into v_count
+  from public.game_results where user_id = v_user_a;
+  if v_count <> 0 then raise exception 'FAIL: delete_my_data left game_results'; end if;
 
   execute 'reset role';
   perform set_config(
@@ -159,6 +209,12 @@ begin
   where user_id = v_user_b and imported = true and played = 2000
     and wins = 2000 and points = 150000;
   if v_count <> 1 then raise exception 'FAIL: imported stats were not safely capped'; end if;
+  v_result := public.delete_my_data();
+  if not (v_result ->> 'deleted')::boolean then
+    raise exception 'FAIL: delete_my_data did not clean imported data';
+  end if;
+  select count(*) into v_count from public.imported_stats where user_id = v_user_b;
+  if v_count <> 0 then raise exception 'FAIL: delete_my_data left imported stats'; end if;
 
   execute 'reset role';
   for v_case in

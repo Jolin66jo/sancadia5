@@ -1,6 +1,5 @@
--- Two-user test for Phase 7B. Run in the Supabase SQL Editor AFTER the migration is pushed.
--- It always ends with an error on purpose: that rolls back all test data.
--- "ALL 7B TESTS PASSED" in the error message = success. Any message starting with FAIL = a problem.
+-- Two-user test for Phase 7B. Run against a local database after `supabase db reset`.
+begin;
 
 do $$
 declare
@@ -32,7 +31,7 @@ begin
 
   r := public.submit_result(gen_random_uuid(), 'noughts-and-crosses', 'beginner', 'win');
   if (r ->> 'points_awarded')::int <> 20 then raise exception 'FAIL: second win should pay 20'; end if;
-  r := public.submit_result(gen_random_uuid(), 'noughts-and-crosses', 'beginner', 'lose');
+  r := public.submit_result(gen_random_uuid(), 'noughts-and-crosses', 'beginner', 'loss');
   if (r ->> 'points_awarded')::int <> 1 then raise exception 'FAIL: loss should pay 1'; end if;
   r := public.submit_result(gen_random_uuid(), 'noughts-and-crosses', 'beginner', 'win');
   if (r ->> 'points_awarded')::int <> 15 then raise exception 'FAIL: streak should reset after a loss'; end if;
@@ -46,7 +45,7 @@ begin
   -- Hints can never push a win below 1 point
   r := public.submit_result(gen_random_uuid(), 'mastermind', 'beginner', 'win', 10, 5);
   if (r ->> 'points_awarded')::int <> 1 then raise exception 'FAIL: puzzle win floor should be 1'; end if;
-  r := public.submit_result(gen_random_uuid(), 'mastermind', 'expert', 'lose', 10, 0);
+  r := public.submit_result(gen_random_uuid(), 'mastermind', 'expert', 'loss', 10, 0);
   if (r ->> 'points_awarded')::int <> 1 then raise exception 'FAIL: puzzle loss should pay 1'; end if;
 
   -- Invalid input is rejected
@@ -124,6 +123,8 @@ begin
       and column_name in ('user_id', 'id', 'email');
   if n <> 0 then raise exception 'FAIL: leaderboard exposes an id or email column'; end if;
 
-  raise exception 'ALL 7B TESTS PASSED (this error is intentional: it rolls the test data back)';
+  raise notice 'All Phase 7B SQL tests passed.';
 end;
 $$;
+
+rollback;
