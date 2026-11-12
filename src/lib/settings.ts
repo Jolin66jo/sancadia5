@@ -8,7 +8,7 @@ export type AnimationSpeed = 'off' | 'slow' | 'normal' | 'fast';
 export type ScreenOrientation = 'auto' | 'portrait' | 'landscape';
 export type FriendRequestPrivacy = 'everyone' | 'friends-of-friends' | 'no-one';
 export type GraphicsQuality = 'high' | 'medium' | 'battery-saver';
-export type Language = 'en' | 'es' | 'fr' | 'zh';
+export type Language = 'en' | 'es' | 'fr' | 'zh' | 'it' | 'pt' | 'nl' | 'hi' | 'de' | 'sv' | 'ja';
 export type GameplayStyle = 'real-time' | 'asynchronous';
 export type GameMode = 'computer' | 'two-player';
 export type GameTimeControl =
@@ -379,7 +379,19 @@ export function parseSettings(value: unknown): Settings {
         ? value.cloudSaveSyncStatus
         : DEFAULT_SETTINGS.cloudSaveSyncStatus,
     darkMode: typeof value.darkMode === 'boolean' ? value.darkMode : DEFAULT_SETTINGS.darkMode,
-    language: isOneOf(value.language, ['en', 'es', 'fr', 'zh'])
+    language: isOneOf(value.language, [
+      'en',
+      'es',
+      'fr',
+      'zh',
+      'it',
+      'pt',
+      'nl',
+      'hi',
+      'de',
+      'sv',
+      'ja',
+    ])
       ? value.language
       : DEFAULT_SETTINGS.language,
     largeText: typeof value.largeText === 'boolean' ? value.largeText : DEFAULT_SETTINGS.largeText,

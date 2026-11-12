@@ -13,8 +13,8 @@ import SettingValue from '@/components/settings/SettingValue';
 import MultiplayerSettingsBlock from '@/components/settings/MultiplayerSettingsBlock';
 import SettingsSection from '@/components/settings/SettingsSection';
 import SettingRow from '@/components/settings/SettingRow';
+import { supportedLanguages } from '@/lib/i18n';
 import ButtonLink from '@/components/ButtonLink';
-import { isNationId } from '@/games/nations';
 import { supportsVibration } from '@/hooks/useFeedback';
 import { useSettings } from '@/hooks/useSettings';
 import { useStats } from '@/hooks/useStats';
@@ -24,6 +24,7 @@ import {
   type SettingsRow as SettingsRowDefinition,
 } from '@/screens/settings/sections';
 import { themes } from '@/theme/themes';
+import useTranslation from '@/hooks/useTranslation';
 
 type ToggleKey = Extract<SettingsRowDefinition, { type: 'toggle' }>['key'];
 
@@ -33,7 +34,7 @@ function isSettingValue<K extends keyof Settings>(
 ): value is Settings[K] & string {
   switch (key) {
     case 'language':
-      return value === 'en' || value === 'es' || value === 'fr' || value === 'zh';
+      return supportedLanguages.some((language) => language.value === value);
     case 'screenOrientation':
       return value === 'auto' || value === 'portrait' || value === 'landscape';
     case 'friendRequestPrivacy':
@@ -57,6 +58,7 @@ function formatValue(value: unknown): string {
 export default function SettingsScreen() {
   const { settings, updateSettings } = useSettings();
   const { stats } = useStats();
+  const { t, tText } = useTranslation();
 
   const updateToggle = (key: ToggleKey, checked: boolean) => {
     const patch: Partial<Settings> = { [key]: checked };
@@ -68,7 +70,13 @@ export default function SettingsScreen() {
       case 'multiplayer':
         return <MultiplayerSettingsBlock key={rowKey} settings={settings} />;
       case 'nation-list':
-        return <NationList key={rowKey} selected={settings.nation} />;
+        return (
+          <NationList
+            key={rowKey}
+            selected={settings.nation}
+            onSelect={(nation) => updateSettings({ nation })}
+          />
+        );
       case 'theme':
         return (
           <SettingThemePicker
@@ -85,15 +93,13 @@ export default function SettingsScreen() {
         return (
           <SettingSelect
             key={rowKey}
-            label={row.label}
-            description={row.description}
+            label={tText(row.label)}
+            description={row.description ? tText(row.description) : undefined}
             status={row.status}
-            options={row.options}
+            options={row.options.map((option) => ({ ...option, label: tText(option.label) }))}
             value={String(settings[row.key])}
             onChange={(value) => {
-              if (row.key === 'nation') {
-                if (isNationId(value)) updateSettings({ nation: value });
-              } else if (isSettingValue(row.key, value)) {
+              if (isSettingValue(row.key, value)) {
                 updateSettings({ [row.key]: value });
               }
             }}
@@ -103,10 +109,10 @@ export default function SettingsScreen() {
         return (
           <SettingSegmented
             key={rowKey}
-            label={row.label}
-            description={row.description}
+            label={tText(row.label)}
+            description={row.description ? tText(row.description) : undefined}
             status={row.status}
-            options={row.options}
+            options={row.options.map((option) => ({ ...option, label: tText(option.label) }))}
             value={String(settings[row.key])}
             onChange={(value) => {
               if (isSettingValue(row.key, value)) {
@@ -120,8 +126,8 @@ export default function SettingsScreen() {
           return (
             <SettingRow
               key={rowKey}
-              label={row.label}
-              description="Vibration is not supported by this browser."
+              label={tText(row.label)}
+              description={tText('Vibration is not supported by this browser.')}
               status={row.status}
             >
               <span aria-hidden="true" />
@@ -131,8 +137,8 @@ export default function SettingsScreen() {
         return (
           <SettingToggle
             key={rowKey}
-            label={row.label}
-            description={row.description}
+            label={tText(row.label)}
+            description={row.description ? tText(row.description) : undefined}
             status={row.status}
             checked={settings[row.key]}
             onChange={(checked) => updateToggle(row.key, checked)}
@@ -142,8 +148,8 @@ export default function SettingsScreen() {
         return (
           <SettingSlider
             key={rowKey}
-            label={row.label}
-            description={row.description}
+            label={tText(row.label)}
+            description={row.description ? tText(row.description) : undefined}
             status={row.status}
             min={row.min}
             max={row.max}
@@ -157,10 +163,10 @@ export default function SettingsScreen() {
         return (
           <SettingTextInput
             key={rowKey}
-            label={row.label}
-            description={row.description}
+            label={tText(row.label)}
+            description={row.description ? tText(row.description) : undefined}
             status={row.status}
-            placeholder={row.placeholder}
+            placeholder={tText(row.placeholder)}
             value={settings[row.key]}
             onChange={(value) => updateSettings({ [row.key]: value })}
           />
@@ -169,8 +175,8 @@ export default function SettingsScreen() {
         return (
           <SettingValue
             key={rowKey}
-            label={row.label}
-            description={row.description}
+            label={tText(row.label)}
+            description={row.description ? tText(row.description) : undefined}
             status={row.status}
             value={row.value ?? formatValue(settings[row.key])}
           />
@@ -180,8 +186,8 @@ export default function SettingsScreen() {
           return (
             <InstallAppButton
               key={rowKey}
-              label={row.label}
-              description={row.description}
+              label={tText(row.label)}
+              description={row.description ? tText(row.description) : undefined}
               status={row.status}
             />
           );
@@ -190,8 +196,8 @@ export default function SettingsScreen() {
           return (
             <ResetDataCard
               key={rowKey}
-              label={row.label}
-              description={row.description}
+              label={tText(row.label)}
+              description={row.description ? tText(row.description) : undefined}
               status={row.status}
             />
           );
@@ -199,8 +205,8 @@ export default function SettingsScreen() {
         return (
           <SettingButton
             key={rowKey}
-            label={row.label}
-            description={row.description}
+            label={tText(row.label)}
+            description={row.description ? tText(row.description) : undefined}
             status={row.status}
             onClick={() => undefined}
           />
@@ -211,16 +217,26 @@ export default function SettingsScreen() {
   return (
     <>
       <ScreenHeader
-        title="Settings"
+        title={t('settings.title')}
         backTo="/"
         className="sticky top-0 z-10 -mx-4 bg-background/95 px-4 backdrop-blur"
       />
       <div className="grid gap-3 pb-4">
+        <SettingSelect
+          label={t('settings.language')}
+          description={t('settings.languageDescription')}
+          status="active"
+          options={supportedLanguages}
+          value={settings.language}
+          onChange={(value) => {
+            if (isSettingValue('language', value)) updateSettings({ language: value });
+          }}
+        />
         {settingsSections.map((section, index) => (
           <SettingsSection
             key={section.id}
-            title={section.title}
-            description={section.description}
+            title={tText(section.title)}
+            description={section.description ? tText(section.description) : undefined}
             open={index === 0}
           >
             <div className="grid">
@@ -228,13 +244,16 @@ export default function SettingsScreen() {
             </div>
           </SettingsSection>
         ))}
-        <SettingsSection title="Stats and points" description="Your game results and earned points.">
+        <SettingsSection
+          title={tText('Stats and points')}
+          description={tText('Your game results and earned points.')}
+        >
           <div className="flex flex-wrap items-center justify-between gap-3">
             <p className="text-sm font-semibold">
-              Total points: <span className="text-primary">{stats.totalPoints}</span>
+              {tText('Total points')}: <span className="text-primary">{stats.totalPoints}</span>
             </p>
             <ButtonLink to="/stats" variant="secondary">
-              View stats
+              {tText('View stats')}
             </ButtonLink>
           </div>
         </SettingsSection>

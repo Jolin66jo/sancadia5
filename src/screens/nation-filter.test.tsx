@@ -17,7 +17,7 @@ describe('nation game filter', () => {
     vi.unstubAllGlobals();
   });
 
-  it('updates the games list when the nation selection changes', async () => {
+  it('opens the selected nation games from the Sancadia Shire links', async () => {
     const user = userEvent.setup();
     render(
       <MemoryRouter initialEntries={['/settings']}>
@@ -33,21 +33,11 @@ describe('nation game filter', () => {
       </MemoryRouter>,
     );
 
-    await user.selectOptions(screen.getByLabelText('Nation'), 'portugal');
-    expect(screen.getByRole('option', { name: '🇩🇪 Germany' })).toBeTruthy();
-    expect(screen.getByRole('option', { name: '🇸🇪 Sweden' })).toBeTruthy();
-    const nationList = screen.getByRole('list', { name: 'Nations' });
-    expect(nationList.querySelector('li[aria-current="true"]')?.textContent).toContain('Portugal');
+    expect(screen.queryByRole('combobox', { name: 'Nation' })).toBeNull();
+    await user.click(screen.getByRole('link', { name: 'Browse Portugal games' }));
     expect(window.localStorage.getItem('classic-games-arcade:settings')).toContain(
       '"nation":"portugal"',
     );
-
-    await user.click(screen.getByRole('link', { name: 'Go back' }));
-    expect(
-      screen.queryByText('Content is unavailable because Supabase is not configured.'),
-    ).toBeNull();
-    expect(screen.queryByRole('link', { name: 'Stats and points' })).toBeNull();
-    await user.click(screen.getByRole('link', { name: /Play/ }));
 
     expect(screen.getByRole('heading', { name: 'Enjoy' })).toBeTruthy();
     expect(screen.queryByLabelText('Game group')).toBeNull();
@@ -60,6 +50,10 @@ describe('nation game filter', () => {
 
   it('resets the saved nation to all with Reset all data', async () => {
     const user = userEvent.setup();
+    window.localStorage.setItem(
+      'classic-games-arcade:settings',
+      JSON.stringify({ version: 7, nation: 'india' }),
+    );
     render(
       <MemoryRouter initialEntries={['/settings']}>
         <SettingsProvider>
@@ -72,10 +66,12 @@ describe('nation game filter', () => {
       </MemoryRouter>,
     );
 
-    await user.selectOptions(screen.getByLabelText('Nation'), 'india');
+    await user.click(screen.getByText('Performance & Data'));
     await user.click(screen.getByRole('button', { name: 'Reset all data' }));
     await user.click(screen.getByRole('button', { name: /^Reset$/ }));
 
-    expect((screen.getByLabelText('Nation') as HTMLSelectElement).value).toBe('all');
+    expect(
+      screen.getByRole('link', { name: 'Browse games from all nations' }).getAttribute('aria-current'),
+    ).toBe('page');
   });
 });

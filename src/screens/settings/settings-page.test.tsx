@@ -180,6 +180,23 @@ describe('global settings page', () => {
     ).toBe('true');
   });
 
+  it('changes and persists the selected language while keeping interface labels unchanged', async () => {
+    const user = userEvent.setup();
+    renderSettings();
+
+    const languageSelect = screen.getByRole('combobox', { name: 'Language' });
+    expect(within(languageSelect).getAllByRole('option')).toHaveLength(11);
+    await user.selectOptions(languageSelect, 'ja');
+
+    expect(screen.getByRole('heading', { name: 'Settings', level: 1 })).toBeTruthy();
+    expect(screen.getByRole('link', { name: /Games/ })).toBeTruthy();
+    expect(screen.getByRole('combobox', { name: 'Language' })).toBeTruthy();
+    expect(document.documentElement.lang).toBe('ja');
+    expect(
+      JSON.parse(window.localStorage.getItem('classic-games-arcade:settings') ?? '{}').language,
+    ).toBe('ja');
+  });
+
   it('keeps preview controls disabled and does not persist attempted changes', async () => {
     const user = userEvent.setup();
     renderSettings();
@@ -212,15 +229,15 @@ describe('global settings page', () => {
     expect(window.localStorage.getItem('classic-games-arcade:settings')).toBeNull();
   });
 
-  it('keeps active theme and nation controls working', async () => {
+  it('keeps nation links and active theme controls working', async () => {
     const user = userEvent.setup();
     renderSettings();
     expect(screen.getByRole('list', { name: 'Nations' }).getAttribute('data-status')).toBe(
       'active',
     );
-    await user.selectOptions(screen.getByRole('combobox', { name: 'Nation' }), 'france');
-    expect(window.localStorage.getItem('classic-games-arcade:settings')).toContain(
-      '"nation":"france"',
+    expect(screen.queryByRole('combobox', { name: 'Nation' })).toBeNull();
+    expect(screen.getByRole('link', { name: 'Browse France games' }).getAttribute('href')).toBe(
+      '/games',
     );
 
     const appearanceSection = screen
@@ -232,12 +249,16 @@ describe('global settings page', () => {
       within(appearanceSection as HTMLElement).getByRole('radio', { name: 'Sunset' }),
     );
     expect(document.documentElement.dataset.theme).toBe('sunset');
+
+    await user.click(screen.getByRole('link', { name: 'Browse France games' }));
+    expect(window.localStorage.getItem('classic-games-arcade:settings')).toContain(
+      '"nation":"france"',
+    );
   });
 
   it('restores active settings after remounting the provider', async () => {
     const user = userEvent.setup();
     const firstRender = renderSettings();
-    await user.selectOptions(screen.getByRole('combobox', { name: 'Nation' }), 'france');
 
     const appearanceSection = screen
       .getByRole('heading', { name: 'Appearance' })
@@ -247,20 +268,24 @@ describe('global settings page', () => {
     await user.click(
       within(appearanceSection as HTMLElement).getByRole('radio', { name: 'Sunset' }),
     );
+    await user.click(screen.getByRole('link', { name: 'Browse France games' }));
     firstRender.unmount();
 
     renderSettings();
-    expect((screen.getByRole('combobox', { name: 'Nation' }) as HTMLSelectElement).value).toBe(
-      'france',
-    );
+    expect(
+      screen.getByRole('link', { name: 'Browse France games' }).getAttribute('aria-current'),
+    ).toBe('page');
     expect(screen.getByRole('radio', { name: 'Sunset' }).getAttribute('aria-checked')).toBe('true');
     expect(document.documentElement.dataset.theme).toBe('sunset');
   });
 
   it('resets active settings to defaults after confirmation', async () => {
     const user = userEvent.setup();
+    window.localStorage.setItem(
+      'classic-games-arcade:settings',
+      JSON.stringify({ version: 7, ...DEFAULT_SETTINGS, nation: 'india' }),
+    );
     renderSettings();
-    await user.selectOptions(screen.getByRole('combobox', { name: 'Nation' }), 'india');
 
     const appearanceSection = screen
       .getByRole('heading', { name: 'Appearance' })
@@ -280,9 +305,11 @@ describe('global settings page', () => {
     await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Reset' }));
 
     expect(window.localStorage.getItem('classic-games-arcade:settings')).toBeNull();
-    expect((screen.getByRole('combobox', { name: 'Nation' }) as HTMLSelectElement).value).toBe(
-      DEFAULT_SETTINGS.nation,
-    );
+    expect(
+      screen
+        .getByRole('link', { name: 'Browse games from all nations' })
+        .getAttribute('aria-current'),
+    ).toBe('page');
     expect(screen.getByRole('radio', { name: 'Classic' }).getAttribute('aria-checked')).toBe(
       'true',
     );

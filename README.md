@@ -48,10 +48,12 @@ arcade and local game features work without those optional values.
 - Improved shared navigation, screen headers, theme-picker wrapping, and PWA notice placement around the bottom navigation and safe-area inset.
 - Updated game screens for more accessible controls and responsive layouts, including Ludo token touch targets and timer cleanup, plus clearer board labels and sizing.
 - Adjusted the home screen spacing and long event text wrapping; improved wrapping and layout for profile and stats content.
+- Replaced the duplicate nation dropdown with clickable nation links under Sancadia Shire; choosing one opens the filtered games list and saves that nation.
 - Added theme-contrast, error-boundary, Ludo timer-cleanup, and home-screen regression tests.
 - Ran limited Chromium checks for mobile and desktop route layout, keyboard focus, reset-dialog dismissal, Ludo touch targets, deep links, and browser history; screen-reader, zoom, offline, and broader game-state checks remain outstanding.
 - Verified `npm run typecheck`, `npm run lint`, and `npm test` (48 files, 280 tests passed). `npm run format:check` still reports 206 unformatted repository files, so the complete check script does not pass.
 - Updated the UI audit inventory and route coverage. The audit remains incomplete; see [docs/UI_AUDIT.md](docs/UI_AUDIT.md) for measured results and remaining checks.
+- Started the Japan games pack: added Japan as a nation and tagged Gomoku as shared with China. Track game implementation in [docs/JAPAN_PACK_CHECKLIST.md](docs/JAPAN_PACK_CHECKLIST.md).
 
 ### What has been done
 
@@ -191,6 +193,7 @@ This roadmap is derived from the build-plan PDFs and the prompt sequence for the
 - `src/components/` — shared React components.
 - `src/screens/` — route-level screens.
 - `src/lib/` — persistence, settings, feedback and other application utilities.
+- [`docs/GAMES.md`](docs/GAMES.md) — available and coming-soon game catalog.
 
 Keep `rules.ts` files pure: no React, DOM, components, screens or hooks imports. Add rule tests
 alongside each game's rules.

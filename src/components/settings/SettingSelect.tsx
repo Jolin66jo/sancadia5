@@ -1,5 +1,6 @@
 import SettingRow, { type SettingStatus } from '@/components/settings/SettingRow';
 import useSettingStatusDescriptionId from '@/components/settings/useSettingStatusDescriptionId';
+import useTranslation from '@/hooks/useTranslation';
 
 export interface SettingOption {
   value: string;
@@ -28,6 +29,7 @@ export default function SettingSelect({
   disabled = false,
   disabledMessage,
 }: SettingSelectProps) {
+  const { tText } = useTranslation();
   const isDisabled = status !== 'active' || disabled;
   const statusDescriptionId = useSettingStatusDescriptionId(status);
   return (
@@ -51,7 +53,7 @@ export default function SettingSelect({
       >
         {options.map((option) => (
           <option key={option.value} value={option.value} disabled={option.disabled}>
-            {option.label}
+            {tText(option.label)}
           </option>
         ))}
       </select>

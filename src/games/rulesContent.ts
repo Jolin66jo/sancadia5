@@ -20,6 +20,14 @@ export type RulesGameId =
   | 'chinesecheckers'
   | 'luzhanqi'
   | 'mahjong'
+  | 'renju'
+  | 'shogi'
+  | 'koikoi'
+  | 'bansugoroku'
+  | 'esugoroku'
+  | 'karuta'
+  | 'ohajiki'
+  | 'fukuwarai'
   | 'checkers'
   | 'battleships'
   | 'mastermind'
@@ -290,6 +298,128 @@ export const rulesContent = {
       expert: 'Balance tile efficiency, likely waits, fan value, and safety.',
     },
     tips: ['Keep track of visible discards when choosing a wait.'],
+  },
+  renju: {
+    title: 'Renju',
+    goal: 'Be the first player to make a winning line on the board.',
+    setup:
+      'Renju uses a 15-by-15 board. Black moves first and has additional forbidden-move rules.',
+    howToPlay: ['Players take turns placing a stone on an empty intersection.'],
+    winning: 'The complete Renju rules and playable game are coming soon.',
+    specialRules: ['Black overlines and double-three and double-four moves will be forbidden.'],
+    difficultyNotes: {
+      beginner: 'Coming soon.',
+      professional: 'Coming soon.',
+      expert: 'Coming soon.',
+    },
+    tips: ['Check back when the game is released.'],
+  },
+  shogi: {
+    title: 'Shogi',
+    goal: 'Checkmate the opposing king.',
+    setup: 'Standard Shogi uses a 9-by-9 board and each player starts with 20 pieces.',
+    howToPlay: ['Move a piece according to its movement rules or drop a captured piece from hand.'],
+    winning: 'The complete Shogi rules and playable game are coming soon.',
+    specialRules: [
+      'Captured pieces change sides; promotion and legal drops are part of the rules.',
+    ],
+    difficultyNotes: {
+      beginner: 'Coming soon.',
+      professional: 'Coming soon.',
+      expert: 'Coming soon.',
+    },
+    tips: ['Check back when the game is released.'],
+  },
+  koikoi: {
+    title: 'Koi-Koi',
+    goal: 'Collect card combinations and score more points over the chosen rounds.',
+    setup: 'Koi-Koi is played with a 48-card Hanafuda deck arranged across 12 months.',
+    howToPlay: ['Match cards by month and collect combinations called yaku.'],
+    winning: 'The complete Koi-Koi rules and playable game are coming soon.',
+    specialRules: [
+      'After making a scoring combination, a player may stop or call koi-koi to continue.',
+    ],
+    difficultyNotes: {
+      beginner: 'Coming soon.',
+      professional: 'Coming soon.',
+      expert: 'Coming soon.',
+    },
+    tips: ['Check back when the game is released.'],
+  },
+  bansugoroku: {
+    title: 'Ban-Sugoroku',
+    goal: 'Move all of your checkers off the board before your opponent.',
+    setup: 'Ban-Sugoroku is a Japanese board game in the backgammon family.',
+    howToPlay: [
+      'Roll dice, move checkers along your route, and use the bar and home board strategically.',
+    ],
+    winning: 'The complete Ban-Sugoroku rules and playable game are coming soon.',
+    specialRules: [
+      'The planned version uses modern backgammon-style rules without a doubling cube.',
+    ],
+    difficultyNotes: {
+      beginner: 'Coming soon.',
+      professional: 'Coming soon.',
+      expert: 'Coming soon.',
+    },
+    tips: ['Check back when the game is released.'],
+  },
+  esugoroku: {
+    title: 'E-Sugoroku',
+    goal: 'Be the first player to reach the final space on the route.',
+    setup: 'Players race along a data-driven illustrated board using one die.',
+    howToPlay: ['Roll and move forward, resolving the effect printed on the space where you land.'],
+    winning: 'The complete E-Sugoroku rules and playable game are coming soon.',
+    specialRules: ['The planned Tokaido Road board uses exact finish and bounce-back movement.'],
+    difficultyNotes: {
+      beginner: 'Coming soon.',
+      professional: 'Coming soon.',
+      expert: 'Coming soon.',
+    },
+    tips: ['Check back when the game is released.'],
+  },
+  karuta: {
+    title: 'Karuta',
+    goal: 'Find the card that matches the poem being read.',
+    setup: 'Karuta is a Japanese card game combining poetry, listening, and quick recognition.',
+    howToPlay: ['Listen to the reading and select its matching card from the cards in play.'],
+    winning: 'The complete Karuta rules and playable game are coming soon.',
+    specialRules: ['The planned game includes competitive Karuta and casual Uta-garuta modes.'],
+    difficultyNotes: {
+      beginner: 'Coming soon.',
+      professional: 'Coming soon.',
+      expert: 'Coming soon.',
+    },
+    tips: ['Check back when the game is released.'],
+  },
+  ohajiki: {
+    title: 'Ohajiki',
+    goal: 'Use a flick to move your game piece toward targets and score points.',
+    setup: 'Ohajiki is a traditional Japanese game played with small glass-like pieces.',
+    howToPlay: ['Aim and flick a piece using the game’s deterministic movement controls.'],
+    winning: 'The complete Ohajiki rules and playable game are coming soon.',
+    specialRules: ['The planned solo and duel modes use integer-based movement for replayability.'],
+    difficultyNotes: {
+      beginner: 'Coming soon.',
+      professional: 'Coming soon.',
+      expert: 'Coming soon.',
+    },
+    tips: ['Check back when the game is released.'],
+  },
+  fukuwarai: {
+    title: 'Fukuwarai',
+    goal: 'Create a playful face by placing its features.',
+    setup:
+      'Fukuwarai is a Japanese New Year’s face-making activity, traditionally played blindfolded.',
+    howToPlay: ['Place face parts by touch, use guided controls, or arrange them freely.'],
+    winning: 'There is no winner; the activity is for creative play.',
+    specialRules: ['The planned game has blindfold, guide, daily-face, and free-play modes.'],
+    difficultyNotes: {
+      beginner: 'Not applicable; this is a creative toy.',
+      professional: 'Not applicable; this is a creative toy.',
+      expert: 'Not applicable; this is a creative toy.',
+    },
+    tips: ['Check back when the game is released.'],
   },
   reversi: {
     title: 'Reversi',

@@ -6,8 +6,10 @@ import ButtonLink from '@/components/ButtonLink';
 import Card from '@/components/Card';
 import ScreenHeader from '@/components/ScreenHeader';
 import { gameComponents, games } from '@/games/registry';
+import useTranslation from '@/hooks/useTranslation';
 
 export default function GameScreen() {
+  const { tText } = useTranslation();
   const { gameId } = useParams();
   const game = games.find((g) => g.id === gameId);
   const [session, setSession] = useState(0);
@@ -19,9 +21,9 @@ export default function GameScreen() {
   if (!game) {
     return (
       <>
-        <ScreenHeader title="Game not found" backTo="/games" />
+        <ScreenHeader title={tText('Game not found')} backTo="/games" />
         <p className="text-subtle">
-          We couldn't find that game. Head back to the menu to pick another.
+          {tText("We couldn't find that game. Head back to the menu to pick another.")}
         </p>
       </>
     );
@@ -32,7 +34,7 @@ export default function GameScreen() {
     return (
       <div className="flex flex-1 flex-col">
         {game.id !== 'latrunculi' && <ScreenHeader title={game.name} />}
-        <Suspense fallback={<p role="status">Loading game…</p>}>
+        <Suspense fallback={<p role="status">{tText('Loading game…')}</p>}>
           <GameComponent />
         </Suspense>
       </div>
@@ -49,16 +51,16 @@ export default function GameScreen() {
         <span className="text-6xl" aria-hidden="true">
           {game.icon}
         </span>
-        <p className="text-xl font-bold">Game coming soon</p>
+        <p className="text-xl font-bold">{tText('Game coming soon')}</p>
         <p className="text-subtle">{game.description}</p>
       </Card>
       <div className="mt-6 grid grid-cols-2 gap-3">
         <ButtonLink to="/games" variant="secondary">
-          Back
+          {tText('Back')}
         </ButtonLink>
         <Button onClick={() => setSession((s) => s + 1)}>
           <RotateCcw className="h-4 w-4" aria-hidden="true" />
-          Restart
+          {tText('Restart')}
         </Button>
       </div>
     </div>

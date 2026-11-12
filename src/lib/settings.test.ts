@@ -126,6 +126,13 @@ describe('settings persistence', () => {
     ).toEqual({ seega: 1.5, senet: 1, malformed: 1 });
   });
 
+  it('accepts each supported app language and rejects unknown values', () => {
+    for (const language of ['en', 'fr', 'it', 'es', 'pt', 'nl', 'zh', 'hi', 'de', 'sv', 'ja']) {
+      expect(parseSettings({ version: SETTINGS_VERSION, language }).language).toBe(language);
+    }
+    expect(parseSettings({ version: SETTINGS_VERSION, language: 'Klingon' }).language).toBe('en');
+  });
+
   it('persists and validates game-specific settings independently of global settings', () => {
     const gameSettings: typeof DEFAULT_SETTINGS.gameSettings = {
       checkers: {

@@ -14,6 +14,7 @@ export const nations = [
   { id: 'india', name: 'India', flag: '🇮🇳' },
   { id: 'germany', name: 'Germany', flag: '🇩🇪' },
   { id: 'sweden', name: 'Sweden', flag: '🇸🇪' },
+  { id: 'japan', name: 'Japan', flag: '🇯🇵' },
 ] as const;
 
 export type NationId = (typeof nations)[number]['id'];

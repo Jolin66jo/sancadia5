@@ -1,14 +1,14 @@
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { describe, expect, it } from 'vitest';
-import SettingsProvider from '@/components/SettingsProvider';
-import StatsProvider from '@/components/StatsProvider';
-import GamesScreen from '@/screens/GamesScreen';
-import GameScreen from '@/screens/GameScreen';
-import RulesScreen from '@/screens/RulesScreen';
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { describe, expect, it } from "vitest";
+import SettingsProvider from "@/components/SettingsProvider";
+import StatsProvider from "@/components/StatsProvider";
+import GamesScreen from "@/screens/GamesScreen";
+import GameScreen from "@/screens/GameScreen";
+import RulesScreen from "@/screens/RulesScreen";
 
-function renderRulesApp(path = '/games') {
+function renderRulesApp(path = "/games") {
   return render(
     <MemoryRouter initialEntries={[path]}>
       <SettingsProvider>
@@ -24,104 +24,192 @@ function renderRulesApp(path = '/games') {
   );
 }
 
-describe('How to play rules', () => {
-  it('opens the selected game rules from its book button without starting the game', async () => {
+describe("How to play rules", () => {
+  it("opens the selected game rules from its book button without starting the game", async () => {
     const user = userEvent.setup();
     renderRulesApp();
 
-    const bookButton = screen.getByRole('button', { name: 'How to play Connect 4' });
-    expect(bookButton.className).toContain('h-11');
-    expect(bookButton.className).toContain('w-11');
+    const bookButton = screen.getByRole("button", {
+      name: "How to play Connect 4",
+    });
+    expect(bookButton.className).toContain("h-11");
+    expect(bookButton.className).toContain("w-11");
     await user.click(bookButton);
 
-    expect(screen.getByRole('heading', { name: 'Connect 4 Rules', level: 1 })).toBeTruthy();
-    expect(screen.getByRole('heading', { name: 'How to play', level: 2 })).toBeTruthy();
-    expect(screen.getByRole('img', { name: /Four ways to connect four/ })).toBeTruthy();
-    expect(screen.getByRole('link', { name: 'Back to games' })).toBeTruthy();
-    expect(screen.queryByRole('heading', { name: 'Setup for connect-4' })).toBeNull();
+    expect(
+      screen.getByRole("heading", { name: "Connect 4 Rules", level: 1 }),
+    ).toBeTruthy();
+    expect(
+      screen.getByRole("heading", { name: "How to play", level: 2 }),
+    ).toBeTruthy();
+    expect(
+      screen.getByRole("img", { name: /Four ways to connect four/ }),
+    ).toBeTruthy();
+    expect(screen.getByRole("link", { name: "Back to games" })).toBeTruthy();
+    expect(
+      screen.queryByRole("heading", { name: "Setup for connect-4" }),
+    ).toBeNull();
   });
 
-  it('shows the ungrouped catalog without a game-group selector', () => {
+  it("shows the ungrouped catalog without a game-group selector", () => {
     renderRulesApp();
 
-    expect(screen.getByRole('heading', { name: 'Enjoy', level: 2 })).toBeTruthy();
-    expect(screen.queryByRole('combobox', { name: 'Game group' })).toBeNull();
-    expect(screen.getByRole('button', { name: 'How to play Xiangqi' })).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'How to play Connect 4' })).toBeTruthy();
+    expect(
+      screen.getByRole("heading", { name: "Enjoy", level: 2 }),
+    ).toBeTruthy();
+    expect(screen.queryByRole("combobox", { name: "Game group" })).toBeNull();
+    expect(
+      screen.getByRole("button", { name: "How to play Xiangqi" }),
+    ).toBeTruthy();
+    expect(
+      screen.getByRole("button", { name: "How to play Connect 4" }),
+    ).toBeTruthy();
   });
 
-  it('lists Egyptian games and explains that reconstructed rules are modern choices', async () => {
+  it("lists Egyptian games and explains that reconstructed rules are modern choices", async () => {
     const user = userEvent.setup();
     renderRulesApp();
 
     for (const gameName of [
-      'Seega',
-      'Egyptian Mancala',
-      'Senet',
-      'The Game of 20 Squares',
-      'Hounds and Jackals',
-      'Mehen',
+      "Seega",
+      "Egyptian Mancala",
+      "Senet",
+      "The Game of 20 Squares",
+      "Hounds and Jackals",
+      "Mehen",
     ]) {
-      expect(screen.getByRole('button', { name: `How to play ${gameName}` })).toBeTruthy();
+      expect(
+        screen.getByRole("button", { name: `How to play ${gameName}` }),
+      ).toBeTruthy();
     }
 
-    await user.click(screen.getByRole('button', { name: 'About reconstructed rules for Senet' }));
+    await user.click(
+      screen.getByRole("button", {
+        name: "About reconstructed rules for Senet",
+      }),
+    );
     expect(
-      screen.getByRole('heading', { name: 'Senet: Reconstructed rules', level: 2 }),
+      screen.getByRole("heading", {
+        name: "Senet: Reconstructed rules",
+        level: 2,
+      }),
     ).toBeTruthy();
     expect(screen.getByText(/original rules were not preserved/i)).toBeTruthy();
   });
 
-  it('serves a direct rules URL and keeps Play enabled for an available game', () => {
-    renderRulesApp('/games/mancala/rules');
+  it("serves a direct rules URL and keeps Play enabled for an available game", () => {
+    renderRulesApp("/games/mancala/rules");
 
-    expect(screen.getByRole('heading', { name: 'Mancala (Kalah) Rules', level: 1 })).toBeTruthy();
+    expect(
+      screen.getByRole("heading", { name: "Mancala (Kalah) Rules", level: 1 }),
+    ).toBeTruthy();
     expect(screen.getAllByText(/extra turn/i).length).toBeGreaterThan(0);
-    const playButton = screen.getByRole('button', { name: /Play/ }) as HTMLButtonElement;
+    const playButton = screen.getByRole("button", {
+      name: /Play/,
+    }) as HTMLButtonElement;
     expect(playButton.disabled).toBe(false);
-    expect(playButton.textContent).not.toContain('Coming soon');
+    expect(playButton.textContent).not.toContain("Coming soon");
   });
 
-  it('opens the rules in advance from an available game card', async () => {
+  it("opens the rules in advance from an available game card", async () => {
     const user = userEvent.setup();
     renderRulesApp();
 
-    await user.click(screen.getByRole('button', { name: 'How to play Minesweeper' }));
-
-    expect(screen.getByRole('heading', { name: 'Minesweeper Rules', level: 1 })).toBeTruthy();
-    expect((screen.getByRole('button', { name: /Play/ }) as HTMLButtonElement).disabled).toBe(
-      false,
+    await user.click(
+      screen.getByRole("button", { name: "How to play Minesweeper" }),
     );
+
+    expect(
+      screen.getByRole("heading", { name: "Minesweeper Rules", level: 1 }),
+    ).toBeTruthy();
+    expect(
+      (screen.getByRole("button", { name: /Play/ }) as HTMLButtonElement)
+        .disabled,
+    ).toBe(false);
   });
 
-  it('renders readable rule sections at a 360px viewport', () => {
-    Object.defineProperty(window, 'innerWidth', { configurable: true, value: 360 });
-    renderRulesApp('/games/2048/rules');
+  it("returns to the selected game setup from the rules back arrow", async () => {
+    const user = userEvent.setup();
+    renderRulesApp("/games/connect-4/rules");
 
-    expect(screen.getByRole('heading', { name: '2048 Rules', level: 1 })).toBeTruthy();
-    expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(7);
-    expect(screen.getByText(/Combine equal-numbered tiles/).className).toContain('text-base');
-    for (const element of document.querySelectorAll('button, a')) {
-      expect(element.className).not.toMatch(/min-w-\[(?:[3-9]\d{2,}|[1-9]\d{3,})px\]/);
+    await user.click(screen.getByRole("link", { name: "Go back" }));
+
+    expect(
+      await screen.findByRole("button", { name: "Start game" }),
+    ).toBeTruthy();
+  });
+
+  it("renders readable rule sections at a 360px viewport", () => {
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: 360,
+    });
+    renderRulesApp("/games/2048/rules");
+
+    expect(
+      screen.getByRole("heading", { name: "2048 Rules", level: 1 }),
+    ).toBeTruthy();
+    expect(screen.getAllByRole("heading", { level: 2 })).toHaveLength(7);
+    expect(
+      screen.getByText(/Combine equal-numbered tiles/).className,
+    ).toContain("text-base");
+    for (const element of document.querySelectorAll("button, a")) {
+      expect(element.className).not.toMatch(
+        /min-w-\[(?:[3-9]\d{2,}|[1-9]\d{3,})px\]/,
+      );
     }
   });
 
-  it('navigates to the game setup from Play for an available game', async () => {
+  it("translates game descriptions and rule text to Japanese while preserving names and controls", async () => {
     const user = userEvent.setup();
-    renderRulesApp('/games/noughts-and-crosses/rules');
+    window.localStorage.setItem(
+      "classic-games-arcade:settings",
+      JSON.stringify({ version: 7, language: "ja" }),
+    );
+    renderRulesApp("/games");
 
-    await user.click(screen.getByRole('button', { name: 'Play' }));
-
-    expect(screen.getByRole('heading', { name: 'Noughts and Crosses', level: 1 })).toBeTruthy();
-    expect(await screen.findByRole('button', { name: 'Start game' })).toBeTruthy();
+    expect(await screen.findByText("オープンボードに 5 つ連続。")).toBeTruthy();
+    await user.click(
+      screen.getByRole("button", { name: "How to play Gomoku" }),
+    );
+    expect(
+      screen.getByRole("heading", { name: "Gomoku Rules", level: 1 }),
+    ).toBeTruthy();
+    expect(
+      screen.getByRole("heading", { name: "Goal", level: 2 }),
+    ).toBeTruthy();
+    expect(
+      screen.getByText(
+        "途切れることのない直線上に 5 つの石を配置した最初のプレイヤーになりましょう。",
+      ),
+    ).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Play" })).toBeTruthy();
   });
 
-  it('offers Rules on the game pre-game screen', async () => {
+  it("navigates to the game setup from Play for an available game", async () => {
     const user = userEvent.setup();
-    renderRulesApp('/games/connect-4');
+    renderRulesApp("/games/noughts-and-crosses/rules");
 
-    await user.click(await screen.findByRole('link', { name: 'How to play Connect 4' }));
+    await user.click(screen.getByRole("button", { name: "Play" }));
 
-    expect(await screen.findByRole('heading', { name: 'Connect 4 Rules', level: 1 })).toBeTruthy();
+    expect(
+      screen.getByRole("heading", { name: "Noughts and Crosses", level: 1 }),
+    ).toBeTruthy();
+    expect(
+      await screen.findByRole("button", { name: "Start game" }),
+    ).toBeTruthy();
+  });
+
+  it("offers Rules on the game pre-game screen", async () => {
+    const user = userEvent.setup();
+    renderRulesApp("/games/connect-4");
+
+    await user.click(
+      await screen.findByRole("link", { name: "How to play Connect 4" }),
+    );
+
+    expect(
+      await screen.findByRole("heading", { name: "Connect 4 Rules", level: 1 }),
+    ).toBeTruthy();
   });
 });

@@ -17,6 +17,10 @@ export default function SettingsProvider({ children }: { children: ReactNode }) 
     applyTheme(getTheme(settings.themeId));
   }, [settings.themeId]);
 
+  useLayoutEffect(() => {
+    document.documentElement.lang = settings.language;
+  }, [settings.language]);
+
   const updateSettings = useCallback(
     (patch: Partial<Settings>) => {
       const next = { ...settings, ...patch };
