@@ -1,5 +1,8 @@
 node_modules/
 dist/
 .env
+HEAD
 .env.*
 !.env.example
+0fc57c7674955104d2b136428bf66ec42cb8bc85
+.env.local
