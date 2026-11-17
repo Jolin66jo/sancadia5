@@ -5,7 +5,7 @@ import { fileURLToPath, URL } from 'node:url';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/Sancadia3/',
+  base: '/',
   plugins: [
     react(),
     VitePWA({
@@ -15,8 +15,8 @@ export default defineConfig({
         name: 'Classic Games Arcade',
         short_name: 'Sancadia',
         description: 'Play classic board games anywhere.',
-        start_url: '/Sancadia3/',
-        scope: '/Sancadia3/',
+        start_url: '/',
+        scope: '/',
         display: 'standalone',
         orientation: 'portrait',
         theme_color: '#f7f8f5',

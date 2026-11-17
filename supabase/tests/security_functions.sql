@@ -134,15 +134,13 @@ begin
   end;
 
   select count(*) into v_count
-  from information_schema.columns
-  where table_schema = 'public'
-    and table_name in ('leaderboard_all_time', 'leaderboard_weekly')
-    and column_name in ('user_id', 'id', 'email');
-  if v_count <> 0 then raise exception 'FAIL: leaderboard exposes an ID or email'; end if;
-  select count(*) into v_count
-  from information_schema.columns
+  from information_schema.tables
   where table_schema = 'public' and table_name = 'profile_display_names';
-  if v_count <> 1 then raise exception 'FAIL: display-name view exposes extra columns'; end if;
+  if v_count <> 0 then raise exception 'FAIL: profile_display_names view still exists'; end if;
+  select count(*) into v_count
+  from information_schema.tables
+  where table_schema = 'public' and table_name = 'profile_display_names';
+  if v_count <> 0 then raise exception 'FAIL: profile_display_names view still exists'; end if;
 
   select count(*) into v_count
   from public.leaderboard_all_time

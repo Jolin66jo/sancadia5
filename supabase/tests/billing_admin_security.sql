@@ -6,7 +6,7 @@ declare
   v_user_a uuid := gen_random_uuid();
   v_user_b uuid := gen_random_uuid();
   v_result jsonb;
-  v_event_applied boolean;
+  v_claim text;
   v_event_id text := 'evt_verify_' || gen_random_uuid()::text;
   v_event_marker text;
   v_count integer;
@@ -139,21 +139,33 @@ begin
     raise exception 'FAIL: user can update stripe_events';
   exception when insufficient_privilege then null;
   end;
+  begin
+    perform public.claim_stripe_event('evt_client_claim', 'test');
+    raise exception 'FAIL: user can call claim_stripe_event';
+  exception when insufficient_privilege then null;
+  end;
+  begin
+    perform public.apply_entitlement_changes('[]'::jsonb);
+    raise exception 'FAIL: user can call apply_entitlement_changes';
+  exception when insufficient_privilege then null;
+  end;
 
+  -- Webhook flow as service_role: claim, apply, complete.
   execute 'reset role';
   execute 'set local role service_role';
-  v_event_applied := public.apply_entitlement_event(
-    v_event_id, 'customer.subscription.created', v_user_b, 'latrunculi_imperial',
-    'stripe_subscription', 'active', 'sub_verify_1', null, 'cs_verify_1',
-    now(), now() + interval '30 days'
-  );
-  if not v_event_applied then raise exception 'FAIL: first entitlement event was skipped'; end if;
-  v_event_applied := public.apply_entitlement_event(
-    v_event_id, 'customer.subscription.created', v_user_b, 'latrunculi_imperial',
-    'stripe_subscription', 'active', 'sub_verify_1', null, 'cs_verify_1',
-    now(), now() + interval '30 days'
-  );
-  if v_event_applied then raise exception 'FAIL: duplicate entitlement event was applied'; end if;
+  v_claim := public.claim_stripe_event(v_event_id, 'customer.subscription.created');
+  if v_claim <> 'claimed' then raise exception 'FAIL: first event was not claimed'; end if;
+  perform public.apply_entitlement_changes(jsonb_build_array(jsonb_build_object(
+    'user_id', v_user_b, 'feature', 'latrunculi_imperial',
+    'source', 'stripe_subscription', 'status', 'active',
+    'stripe_subscription_id', 'sub_verify_1',
+    'stripe_checkout_session_id', 'cs_verify_1',
+    'granted_at', now(), 'current_period_end', now() + interval '30 days'
+  )));
+  perform public.complete_stripe_event(v_event_id, true);
+
+  v_claim := public.claim_stripe_event(v_event_id, 'customer.subscription.created');
+  if v_claim <> 'duplicate' then raise exception 'FAIL: processed event was claimed again'; end if;
 
   v_event_marker := null;
   insert into public.stripe_events (event_id, type)
@@ -162,21 +174,39 @@ begin
   returning event_id into v_event_marker;
   if v_event_marker is not null then raise exception 'FAIL: duplicate event insert was not detected'; end if;
 
+  -- Applying the same change twice must not create a second row.
+  perform public.apply_entitlement_changes(jsonb_build_array(jsonb_build_object(
+    'user_id', v_user_b, 'feature', 'latrunculi_imperial',
+    'source', 'stripe_subscription', 'status', 'active',
+    'stripe_subscription_id', 'sub_verify_1',
+    'stripe_checkout_session_id', 'cs_verify_1',
+    'granted_at', now(), 'current_period_end', now() + interval '30 days'
+  )));
   select count(*) into v_count
   from public.entitlements
   where user_id = v_user_b and feature = 'latrunculi_imperial'
     and stripe_subscription_id = 'sub_verify_1';
   if v_count <> 1 then raise exception 'FAIL: event replay created duplicate entitlement'; end if;
+
+  -- A failed event can be retried.
+  v_claim := public.claim_stripe_event('evt_fail_' || v_user_b::text, 'invoice.paid');
+  if v_claim <> 'claimed' then raise exception 'FAIL: failing event was not claimed'; end if;
+  perform public.complete_stripe_event('evt_fail_' || v_user_b::text, false, 'boom');
+  v_claim := public.claim_stripe_event('evt_fail_' || v_user_b::text, 'invoice.paid');
+  if v_claim <> 'claimed' then raise exception 'FAIL: failed event was not retryable'; end if;
   execute 'reset role';
 
+  -- Past-due grace period.
   execute 'set local role service_role';
-  v_event_applied := public.apply_entitlement_event(
-    'evt_past_due_' || v_user_b::text,
-    'invoice.payment_failed', v_user_b, 'expert_access',
-    'stripe_subscription', 'past_due', 'sub_past_due_verify', null, null,
-    now(), now() + interval '30 days'
-  );
-  if not v_event_applied then raise exception 'FAIL: past-due entitlement was not recorded'; end if;
+  v_claim := public.claim_stripe_event('evt_past_due_' || v_user_b::text, 'invoice.payment_failed');
+  if v_claim <> 'claimed' then raise exception 'FAIL: past-due event was not claimed'; end if;
+  perform public.apply_entitlement_changes(jsonb_build_array(jsonb_build_object(
+    'user_id', v_user_b, 'feature', 'expert_access',
+    'source', 'stripe_subscription', 'status', 'past_due',
+    'stripe_subscription_id', 'sub_past_due_verify',
+    'granted_at', now(), 'current_period_end', now() + interval '30 days'
+  )));
+  perform public.complete_stripe_event('evt_past_due_' || v_user_b::text, true);
   execute 'reset role';
   perform set_config(
     'request.jwt.claims',
@@ -197,6 +227,7 @@ begin
   end if;
   execute 'reset role';
 
+  -- Expert gating.
   update public.billing_config set paywall_enabled = false where singleton;
   perform set_config(
     'request.jwt.claims',
@@ -228,13 +259,15 @@ begin
 
   execute 'reset role';
   execute 'set local role service_role';
-  v_event_applied := public.apply_entitlement_event(
-    'evt_expert_' || gen_random_uuid()::text,
-    'customer.subscription.created', v_user_a, 'expert_access',
-    'stripe_subscription', 'active', 'sub_expert_verify', null, null,
-    now(), now() + interval '30 days'
-  );
-  if not v_event_applied then raise exception 'FAIL: expert entitlement was not granted'; end if;
+  v_claim := public.claim_stripe_event('evt_expert_' || v_user_a::text, 'customer.subscription.created');
+  if v_claim <> 'claimed' then raise exception 'FAIL: expert event was not claimed'; end if;
+  perform public.apply_entitlement_changes(jsonb_build_array(jsonb_build_object(
+    'user_id', v_user_a, 'feature', 'expert_access',
+    'source', 'stripe_subscription', 'status', 'active',
+    'stripe_subscription_id', 'sub_expert_verify',
+    'granted_at', now(), 'current_period_end', now() + interval '30 days'
+  )));
+  perform public.complete_stripe_event('evt_expert_' || v_user_a::text, true);
   execute 'reset role';
   execute 'set local role authenticated';
   if not public.has_entitlement('expert_access') then
@@ -254,7 +287,8 @@ begin
     from pg_proc p
     join pg_namespace n on n.oid = p.pronamespace
     where n.nspname = 'public'
-      and p.proname = 'latrunculi_admin_metrics'
+      and p.proname in ('latrunculi_admin_metrics', 'claim_stripe_event',
+                        'complete_stripe_event', 'apply_entitlement_changes')
       and (
         has_function_privilege('anon', p.oid, 'execute')
         or has_function_privilege('authenticated', p.oid, 'execute')
